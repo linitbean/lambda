@@ -56,10 +56,9 @@ const ResetPassword = () => {
     // console.log(token);
     const verifyToken = async () => {
       try {
-        const { data } = await axios.post("/api/auth/reset-password/token", {
+        await axios.post("/api/auth/reset-password/token", {
           passwordResetToken: token,
         });
-        // console.log(data);
         dispatch({
           type: "success",
         });
@@ -88,11 +87,7 @@ const ResetPassword = () => {
   const resetPassword = async ({ showPassword, ...formData }) => {
     formData.passwordResetToken = token;
     try {
-      const data = await axios.post(
-        "/api/auth/reset-password/change",
-        formData
-      );
-      // console.log(data);
+      await axios.post("/api/auth/reset-password/change", formData);
       history.push("/account/login");
     } catch (err) {
       // console.log(err.response);

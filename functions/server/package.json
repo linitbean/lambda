@@ -23,7 +23,6 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.11",
     "nodemailer": "^6.4.17",
-    "nodemailer-sendgrid-transport": "^0.2.0",
     "serverless-http": "^2.6.0"
   }
 }

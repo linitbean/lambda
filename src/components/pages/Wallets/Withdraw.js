@@ -104,11 +104,7 @@ const Withdraw = () => {
     const transaction = { ...formData, user: profile._id, type: "withdrawal" };
     try {
       start();
-      const { data: res } = await axiosInstance.post(
-        "/transactions",
-        transaction
-      );
-      // console.log(res);
+      await axiosInstance.post("/transactions", transaction);
       complete("Withdrawal Successful");
       mutateTransactions();
       reset({

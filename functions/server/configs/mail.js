@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const mg = require("nodemailer-sendgrid-transport");
+// const mg = require("nodemailer-sendgrid-transport");
 const handlebars = require("handlebars");
 const fs = require("fs");
 const path = require("path");

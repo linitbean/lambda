@@ -41,10 +41,7 @@ const EditUserWallet = () => {
   } = useAdminUserWallet(userId, symbol);
   const { total, available } = useAdminWalletBalance(userId, symbol);
 
-  const {
-    wallets: userWallets,
-    mutate: mutateUserWallets,
-  } = useAdminUserWallets(userId);
+  const { mutate: mutateUserWallets } = useAdminUserWallets(userId);
 
   const schema = yup.object().shape({
     address: yup.string().required("Wallet address is required"),
