@@ -1,25 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense, lazy } from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
+import { SWRConfig } from "swr";
 
-function App() {
+import PreLoader from "./components/atoms/PreLoader";
+
+import GlobalStyles from "./themes/global";
+
+import { ThemeProvider } from "./contexts/ThemeContext";
+
+import ScrollToTop from "./utils/ScrollToTop";
+import SWROptions from "./utils/swr";
+
+// import AuthRoute from "./routes/AuthRoute";
+// import DashboardRoute from "./routes/DashboardRoute";
+// import RestrictionRoute from "./routes/RestrictionRoute";
+
+const AuthRoute = lazy(() => import("./routes/AuthRoute"));
+const DashboardRoute = lazy(() => import("./routes/DashboardRoute"));
+const RestrictionRoute = lazy(() => import("./routes/RestrictionRoute"));
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider>
+      <SWRConfig value={SWROptions}>
+        <Router>
+          <ScrollToTop />
+          <GlobalStyles />
+          <Suspense fallback={<PreLoader />}>
+            <Switch>
+              <Route path="/dashboard">
+                <DashboardRoute />
+              </Route>
+              <Route path="/account">
+                <AuthRoute />
+              </Route>
+              <Route path="/confirmation">
+                <RestrictionRoute />
+              </Route>
+              <Route>
+                <Redirect to="/dashboard" />
+              </Route>
+            </Switch>
+          </Suspense>
+        </Router>
+      </SWRConfig>
+    </ThemeProvider>
   );
 }
-
-export default App;

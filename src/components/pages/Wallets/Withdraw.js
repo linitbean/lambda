@@ -1,0 +1,255 @@
+import React from "react";
+import { useLocation } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import PreLoader from "../../atoms/PreLoader";
+import Container from "../../atoms/Container";
+import Text from "../../atoms/Text";
+import SubText from "../../atoms/SubText";
+import Input from "../../atoms/Input";
+import Button from "../../atoms/Button";
+import Spinner from "../../atoms/Spinner";
+
+import WalletBalance from "../../molecules/WalletBalance";
+import ControlledWalletInput from "../../molecules/ControlledWalletInput";
+import ControlledCardInput from "../../molecules/ControlledCardInput";
+
+import RecentWithdrawals from "../../organisms/RecentWithdrawals";
+import ConfirmationModal from "../../organisms/ConfirmationModal";
+import ProcessModal from "../../organisms/ProcessModal";
+
+import DashboardLayout from "../../templates/Dashboard";
+
+import { useProfile } from "../../../hooks/useProfile";
+import { useWallets } from "../../../hooks/useWallets";
+import { useTransactions } from "../../../hooks/useTransactions";
+import { useWalletBalance } from "../../../hooks/useBalance";
+import { useToggle } from "../../../hooks/useToggle";
+import { useProcess } from "../../../hooks/useProcess";
+
+import axiosInstance from "../../../utils/axios";
+import { rawBalance } from "../../../utils/parseBalance";
+
+import { withdrawalSchema } from "../../../validators/transaction";
+
+const Withdraw = () => {
+  const { state } = useLocation();
+
+  const { profile } = useProfile();
+  const { wallets, loading: loadingWallets } = useWallets();
+  const { mutate: mutateTransactions } = useTransactions();
+
+  const {
+    show,
+    processing,
+    response,
+    success,
+    start,
+    complete,
+    fail,
+    close,
+  } = useProcess();
+
+  const {
+    show: showWithdrawalModal,
+    open: openWithdrawalModal,
+    close: closeWithdrawalModal,
+  } = useToggle();
+
+  const {
+    register,
+    control,
+    handleSubmit,
+    watch,
+    formState,
+    setValue,
+    setError,
+    getValues,
+    reset,
+    errors,
+  } = useForm({
+    defaultValues: {
+      amount: null,
+      wallet: state?.wallet || "BTC",
+      card: "",
+    },
+    resolver: yupResolver(withdrawalSchema),
+  });
+
+  const { amount, wallet } = watch();
+  const { isSubmitting } = formState;
+
+  const selectedWallet = wallets?.find(
+    (w) => w?.symbol.toLowerCase() === wallet?.toLowerCase()
+  );
+
+  const { available } = useWalletBalance(wallet);
+  const balance = rawBalance(available);
+
+  const setMax = () =>
+    setValue("amount", balance, {
+      shouldValidate: true,
+    });
+
+  const makeWithdrawal = async () => {
+    const formData = getValues();
+    if (formData.amount > balance) {
+      setError("amount", {
+        type: "server",
+        message: "You do not have sufficient balance",
+      });
+      return;
+    }
+    const transaction = { ...formData, user: profile._id, type: "withdrawal" };
+    try {
+      start();
+      const { data: res } = await axiosInstance.post(
+        "/transactions",
+        transaction
+      );
+      // console.log(res);
+      complete("Withdrawal Successful");
+      mutateTransactions();
+      reset({
+        amount: null,
+        wallet: formData.wallet,
+      });
+    } catch (err) {
+      // console.log(err.response);
+      fail(
+        err.response.data.message === "Account Restricted"
+          ? "Your Account has been temporarily restricted"
+          : undefined
+      );
+    }
+  };
+
+  return loadingWallets ? (
+    <DashboardLayout>
+      <PreLoader page />
+    </DashboardLayout>
+  ) : (
+    <DashboardLayout>
+      {selectedWallet && (
+        <Container p="24px 12px 12px" wide>
+          <WalletBalance wallet={selectedWallet} />
+          <Container m="12px 0 0" display="grid" gap="12px" flow="column" wide>
+            <Button
+              bg="primary"
+              p="12px"
+              radius="6px"
+              bold="true"
+              to="/dashboard/settings/cards"
+            >
+              Manage Cards
+            </Button>
+            <Button
+              bg="secondary"
+              color="black"
+              p="12px"
+              radius="6px"
+              bold="true"
+              to="/dashboard/wallets"
+            >
+              All Wallets
+            </Button>
+          </Container>
+        </Container>
+      )}
+
+      <Container
+        as="form"
+        p="0 12px 24px"
+        m="12px 0"
+        bg="actionBg"
+        wide
+        onSubmit={handleSubmit(openWithdrawalModal)}
+      >
+        <Text color="white" p="24px 8px 0" bold flexalign justify="flex-end">
+          {available} USD
+          <SubText
+            bg="bg"
+            color="text"
+            font="11px"
+            p="6px 8px"
+            m="0 0 0 12px"
+            radius="4px"
+            bold
+            pointer
+            onClick={setMax}
+          >
+            MAX
+          </SubText>
+        </Text>
+        <ControlledWalletInput
+          color="white"
+          radius="8px"
+          label="Select Wallet"
+          placeholder="Select Wallet"
+          wallets={wallets}
+          control={control}
+          name="wallet"
+          error={errors.wallet?.message}
+        />
+        <Input
+          color="white"
+          radius="8px"
+          label="Amount"
+          placeholder="Amount"
+          type="number"
+          m="12px 0"
+          ref={register({
+            valueAsNumber: true,
+          })}
+          name="amount"
+          error={errors.amount?.message}
+        />
+        <ControlledCardInput
+          color="white"
+          radius="8px"
+          label="Withdrawal Method"
+          placeholder="Select Card"
+          cards={profile.cards}
+          control={control}
+          name="card"
+          error={errors.card?.message}
+        />
+
+        <Button
+          type="submit"
+          bg="primary"
+          color="invertText"
+          full
+          m="24px 0"
+          radius="8px"
+          bold
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? <Spinner /> : "Withdraw"}
+        </Button>
+
+        <ConfirmationModal
+          open={showWithdrawalModal}
+          dismiss={closeWithdrawalModal}
+          action={makeWithdrawal}
+          title="Confirm Withdrawal"
+          message={`Withdraw ${amount} USD from your ${wallet.toUpperCase()} wallet`}
+        />
+
+        <ProcessModal
+          title="Completing Withdrawal"
+          open={show}
+          processing={processing}
+          response={response}
+          success={success}
+          dismiss={close}
+        />
+      </Container>
+
+      <RecentWithdrawals />
+    </DashboardLayout>
+  );
+};
+
+export default Withdraw;
