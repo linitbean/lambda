@@ -152,13 +152,6 @@ const Register = () => {
             Login
           </Text>
         </Text>
-        <Text
-          align="center"
-          display="block"
-          to="/account/referral/6016632de4faea2de0ce7328"
-        >
-          Admin referral
-        </Text>
       </Container>
     </AuthLayout>
   );
