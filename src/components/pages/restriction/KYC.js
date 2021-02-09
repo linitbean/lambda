@@ -10,7 +10,7 @@ import Select from "../../atoms/Select";
 import Button from "../../atoms/Button";
 import Spinner from "../../atoms/Spinner";
 
-import ControlledPhoneInput from "../../molecules/ControlledPhoneInput";
+import PhoneInput from "../../molecules/PhoneInput";
 import ControlledDateInput from "../../molecules/ControlledDateInput";
 
 import AuthLayout from "../../templates/Auth";
@@ -43,7 +43,7 @@ const KYC = () => {
         gender: "",
         dob: new Date(),
         city: "",
-        country: "",
+        country: countries.find((c) => c.code === "US")?.name || "",
       },
     },
     resolver: yupResolver(profileSchema),
@@ -119,13 +119,13 @@ const KYC = () => {
           name="profile.city"
           error={errors.profile?.city?.message}
         />
-        <ControlledPhoneInput
+        <PhoneInput
           radius="6px"
           p="14px 12px"
           type="tel"
           label="Phone Number"
           placeholder="Phone Number"
-          control={control}
+          ref={register}
           name="profile.phone"
           error={errors.profile?.phone?.message}
         />

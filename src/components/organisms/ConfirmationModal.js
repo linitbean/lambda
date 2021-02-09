@@ -57,7 +57,7 @@ const ConfirmationModal = ({
           >
             Cancel
           </Button>
-          <Button bg="actionBg" p="12px" bold full onClick={action}>
+          <Button bg="primary" p="12px" bold full onClick={action}>
             Continue
           </Button>
         </Container>

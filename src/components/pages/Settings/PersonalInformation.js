@@ -9,6 +9,7 @@ import Select from "../../atoms/Select";
 import Button from "../../atoms/Button";
 import Text from "../../atoms/Text";
 
+import PhoneInput from "../../molecules/PhoneInput";
 import ControlledDateInput from "../../molecules/ControlledDateInput";
 
 import ConfirmationModal from "../../organisms/ConfirmationModal";
@@ -21,8 +22,6 @@ import { profileSchema } from "../../../validators/profile";
 import axiosInstance from "../../../utils/axios";
 
 import countries from "../../../store/countries";
-
-import ControlledPhoneInput from "../../molecules/ControlledPhoneInput";
 
 const PersonalInformation = () => {
   const history = useHistory();
@@ -127,12 +126,12 @@ const PersonalInformation = () => {
           name="profile.city"
           error={errors.profile?.city?.message}
         />
-        <ControlledPhoneInput
+        <PhoneInput
           radius="8px"
           type="tel"
           label="Phone Number"
           placeholder="Phone Number"
-          control={control}
+          ref={register}
           name="profile.phone"
           error={errors.profile?.phone?.message}
         />
