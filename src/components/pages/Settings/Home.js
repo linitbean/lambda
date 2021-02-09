@@ -1,6 +1,5 @@
 import React from "react";
 import { useRouteMatch } from "react-router-dom";
-import { formatPhoneNumberIntl } from "react-phone-number-input";
 
 import Container from "../../atoms/Container";
 import Text from "../../atoms/Text";
@@ -12,7 +11,11 @@ import Upgrade from "../../organisms/Upgrade";
 
 import { useProfile } from "../../../hooks/useProfile";
 
-import { capitalise, convertDate } from "../../../utils/formatText";
+import {
+  capitalise,
+  convertDate,
+  formatPhoneNumber,
+} from "../../../utils/formatText";
 import { getMembership } from "../../../utils/profileUtils";
 
 const Home = () => {
@@ -62,7 +65,7 @@ const Home = () => {
         />
         <SettingsItem
           title="Phone Number"
-          body={formatPhoneNumberIntl(profile.profile?.phone)}
+          body={formatPhoneNumber(profile.profile?.phone)}
           to={`${url}/personal-information`}
         />
         <SettingsItem

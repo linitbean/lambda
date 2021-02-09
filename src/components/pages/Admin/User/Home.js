@@ -1,7 +1,6 @@
 import React from "react";
 import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 import { FaCheck, FaTrash } from "react-icons/fa";
-import { formatPhoneNumberIntl } from "react-phone-number-input";
 
 import Container from "../../../atoms/Container";
 import Text from "../../../atoms/Text";
@@ -16,7 +15,11 @@ import { useAdminUser, useAdminUsers } from "../../../../hooks/useUsers";
 import { useMultipleConfirmation } from "../../../../hooks/useMultipleConfirmation";
 
 import axiosInstance from "../../../../utils/axios";
-import { capitalise, convertDate } from "../../../../utils/formatText";
+import {
+  capitalise,
+  convertDate,
+  formatPhoneNumber,
+} from "../../../../utils/formatText";
 
 import { AdminDisplay } from "../common/AdminChecker";
 
@@ -213,7 +216,7 @@ const Home = () => {
         <SettingsItem title="Last Name" body={user.lastName} />
         <SettingsItem
           title="Phone Number"
-          body={formatPhoneNumberIntl(user.profile?.phone)}
+          body={formatPhoneNumber(user.profile?.phone)}
         />
         <SettingsItem title="Country" body={user.profile?.country} />
         <SettingsItem title="City" body={user.profile?.city} />

@@ -1,3 +1,5 @@
+import { formatPhoneNumberIntl } from "react-phone-number-input";
+
 export const capitalise = (str) => {
   if (!str) return;
   return str[0].toUpperCase() + str.substring(1);
@@ -20,3 +22,6 @@ export const convertDate = (str) => {
   if (isNaN(date)) return "";
   return date.toDateString();
 };
+
+export const formatPhoneNumber = (number) =>
+  formatPhoneNumberIntl(number) || number;
