@@ -1,8 +1,9 @@
 const mailer = require("../configs/mail");
 
+const appUrl = process.env.REACT_APP_URL;
+
 const welcomeMail = async (user, emailToken) => {
-  const verificationLink =
-    "172.20.10.5:8888/account/verify-email/" + emailToken;
+  const verificationLink = appUrl + "/account/verify-email/" + emailToken;
 
   const resp = await mailer({
     to: user.email,
@@ -17,8 +18,7 @@ const welcomeMail = async (user, emailToken) => {
 };
 
 const emailVerificationMail = async (email, emailToken) => {
-  const verificationLink =
-    "172.20.10.5:8888/confirmation/verify-email/" + emailToken;
+  const verificationLink = appUrl + "/confirmation/verify-email/" + emailToken;
 
   const resp = await mailer({
     to: email,
@@ -32,7 +32,7 @@ const emailVerificationMail = async (email, emailToken) => {
 };
 
 const passwordResetMail = async (user, passwordToken) => {
-  const resetLink = "172.20.10.5:8888/account/reset-password/" + passwordToken;
+  const resetLink = appUrl + "/account/reset-password/" + passwordToken;
 
   const resp = await mailer({
     to: user.email,

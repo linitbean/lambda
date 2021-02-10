@@ -22,6 +22,7 @@ export const light = {
     invertText: "#fff",
     bg: "#E0E0E0",
     bgContrast: "white",
+    skeleton: "linear-gradient(-90deg, #f0f0f0 0%, #f8f8f8 50%, #f0f0f0 100%)",
 
     //computed
     actionBg: "#383B42",
@@ -37,6 +38,7 @@ export const dark = {
     invertText: "#000",
     bg: "#242526",
     bgContrast: "#2F3137",
+    skeleton: "linear-gradient(-90deg, #2f3137 0%, #242526 50%, #2f3137 100%)",
 
     //computed
     actionBg: "#335C67",

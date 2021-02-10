@@ -87,7 +87,6 @@ const signEmailToken = (userId) => {
     };
     JWT.sign(payload, secret, options, (err, token) => {
       if (err) {
-        // console.log(err.message);
         reject(createError.InternalServerError());
       }
       resolve(token);
