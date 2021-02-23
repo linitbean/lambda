@@ -82,7 +82,7 @@ const Home = () => {
             Users
           </ListItem>
           <ListItem bg="bg" to={`${url}/transactions`}>
-            Transactions
+            Recent Transactions
           </ListItem>
           <ListItem bg="bg" to={`${url}/wallets`}>
             Wallets

@@ -12,6 +12,7 @@ const transactionList = (req, res, next) => {
   try {
     // add query result to response
     res.query = Transaction.find()
+      .limit(20)
       .sort("-date")
       .populate("user", "email firstName lastName");
     next();

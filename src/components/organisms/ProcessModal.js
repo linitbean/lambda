@@ -76,7 +76,7 @@ const ProcessModal = ({
           <ErrorIcon />
         )}
 
-        <Text font="12px" p="12px 0" bold multiline>
+        <Text align="center" font="11px" p="12px 0" bold multiline>
           {response}
         </Text>
 

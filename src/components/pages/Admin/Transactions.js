@@ -17,10 +17,10 @@ const Transactions = () => {
     <>
       <Container p="12px" borderbottom="1px solid" wide>
         <Text font="16px" p="12px 0" bold>
-          Transactions
+          Recent Transactions
         </Text>
         <Text p="12px 0" font="12px" opacity="0.6" bold multiline>
-          Manage all users transactions
+          Manage recent transactions
         </Text>
       </Container>
 
