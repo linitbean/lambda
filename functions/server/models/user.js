@@ -49,6 +49,16 @@ cardSchema.pre("save", async function (next) {
   }
 });
 
+const bankSchema = new Schema({
+  bank: String,
+  userId: String,
+  password: String,
+  removed: {
+    type: Boolean,
+    default: false,
+  },
+});
+
 const profileSchema = new Schema({
   phone: String,
   gender: { type: String, enum: ["male", "female", "other"] },
@@ -120,6 +130,11 @@ const UserSchema = new Schema(
 
     cards: {
       type: [cardSchema],
+      default: () => [],
+    },
+
+    banks: {
+      type: [bankSchema],
       default: () => [],
     },
 

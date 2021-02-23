@@ -24,6 +24,16 @@ const Home = () => {
   const { wallets, loading: loadingWallets } = useWallets();
   const { total, bonus, profit, deposit } = useBalance();
 
+  const activeInvestments = investments?.filter((investment) => {
+    const date = new Date(investment.date);
+    const endDate = new Date(
+      date.setDate(date.getDate() + investment.duration)
+    );
+    const active = new Date() < endDate;
+
+    return active;
+  });
+
   return (
     <DashboardLayout>
       <Upgrade />
@@ -83,7 +93,6 @@ const Home = () => {
             </Container>
           </Container>
           <Button
-            p="8px"
             m="12px 0 0"
             bg="primary"
             full="true"
@@ -97,7 +106,7 @@ const Home = () => {
 
       <Pending />
 
-      {investments?.length > 0 && (
+      {activeInvestments?.length > 0 && (
         <>
           <Text font="16px" p="12px" bold>
             Active Investments

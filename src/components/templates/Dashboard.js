@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 import NavBar from "../organisms/NavBar";
@@ -67,6 +68,10 @@ const Content = styled.main`
 const Dashboard = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
+  const { pathname } = useLocation();
+
+  useEffect(() => setSidebarOpen(false), [pathname]);
 
   return (
     <Wrapper>

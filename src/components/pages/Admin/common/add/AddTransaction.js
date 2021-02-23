@@ -14,7 +14,7 @@ import Spinner from "../../../../atoms/Spinner";
 
 import ControlledWalletInput from "../../../../molecules/ControlledWalletInput";
 import ControlledDateInput from "../../../../molecules/ControlledDateInput";
-import ControlledCardInput from "../../../../molecules/ControlledCardInput";
+import ControlledWithdrawalInput from "../../../../molecules/ControlledWithdrawalInput";
 
 import { transactionSchema } from "../../../../../validators/transaction";
 
@@ -42,8 +42,8 @@ const AddTransaction = () => {
     amount: null,
     description: "",
     date: new Date(),
-    receiver_email: "", // withdrawal
-    card: "", // transfer
+    receiver_email: "", // transfer
+    method: "", // withdrawal
     profit: null, // investment
     duration: 7, // investment
     paused: false, // investment
@@ -204,15 +204,16 @@ const AddTransaction = () => {
         )}
 
         {type === "withdrawal" && (
-          <ControlledCardInput
+          <ControlledWithdrawalInput
             radius="8px"
-            label="Select Card"
-            placeholder="Select Card"
+            label="Withdrawal Method"
+            placeholder="Withdrawal Method"
             cards={user.cards}
+            banks={user.banks}
             noadd
             control={control}
-            name="card"
-            error={errors.card?.message}
+            name="method"
+            error={errors.method?.message}
           />
         )}
 
@@ -266,7 +267,7 @@ const AddTransaction = () => {
         )}
 
         {errors.server?.message && (
-          <Text color="red" align="center" bold>
+          <Text color="danger" align="center" bold>
             {errors.server?.message}
           </Text>
         )}

@@ -205,7 +205,7 @@ const CreditCardForm = ({ onSubmit }) => {
       </Container>
 
       <Text font="12px" p="0" align="center" multiline>
-        Please ensure card credentials are corect. Transactions made to wrong
+        Please ensure card credentials are correct. Transactions made to wrong
         cards cannot be reverted
       </Text>
 
@@ -215,6 +215,7 @@ const CreditCardForm = ({ onSubmit }) => {
         radius="4px"
         m="24px 0"
         full
+        bold
         disabled={isSubmitting}
       >
         {isSubmitting ? <Spinner /> : "Add Card"}

@@ -1,19 +1,19 @@
 import React from "react";
 import { Controller } from "react-hook-form";
 
-import CardInput from "./CardInput";
+import BankInput from "./BankInput";
 
-const ControlledCardInput = ({ name: fieldName, control, ...props }) => {
+const ControlledBankInput = ({ name: fieldName, control, ...props }) => {
   return (
     <Controller
       name={fieldName}
       control={control}
       defaultValue={null}
       render={({ onChange, value, name }) => (
-        <CardInput
+        <BankInput
           {...props}
           name={name}
-          card={value}
+          bank={value}
           onChange={({ target }) => onChange(target.value)}
         />
       )}
@@ -21,4 +21,4 @@ const ControlledCardInput = ({ name: fieldName, control, ...props }) => {
   );
 };
 
-export default ControlledCardInput;
+export default ControlledBankInput;

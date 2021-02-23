@@ -12,7 +12,7 @@ const Upgrade = (props) => {
 
   return (
     <Container p="12px" wide {...props}>
-      <Container bg="orange" p="12px" radius="8px" wide>
+      <Container bg="orange" p="6px" radius="8px" wide>
         <Text>
           Please Upgrade Your Account,{" "}
           <Text p="0" underline="true" to="/dashboard/settings/verification">

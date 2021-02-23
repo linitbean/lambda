@@ -71,6 +71,7 @@ const emailVerify = async (req, res, next) => {
   try {
     const { emailToken } = req.body;
     const { userId } = await verifyEmailToken(emailToken);
+    console.log(userId);
 
     // check if user exists
     const user = await User.findById(userId);
@@ -86,6 +87,7 @@ const emailVerify = async (req, res, next) => {
 
     res.json({ message: "User successfully verified" });
   } catch (err) {
+    console.log(err, err.message);
     next(err);
   }
 };

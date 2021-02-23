@@ -92,17 +92,19 @@ const Dashboard = () => {
               p="0"
               m="0 24px 0 0"
               flexalign="true"
+              bold="true"
               to="/dashboard/wallets"
             >
               <SubText font="11px" p="0" m="0 6px 0 0" flexalign>
                 <FaWallet />
               </SubText>
-              My Accounts
+              My Wallets
             </Text>
             <Text
               font="12px"
               p="0"
               flexalign="true"
+              bold="true"
               to="/dashboard/wallets/withdraw"
             >
               <SubText font="11px" p="0" m="0 6px 0 0" flexalign>

@@ -1,10 +1,10 @@
 const nodemailer = require("nodemailer");
-// const mg = require("nodemailer-sendgrid-transport");
+const nodemailerSendgrid = require("nodemailer-sendgrid");
 const handlebars = require("handlebars");
 const fs = require("fs");
 const path = require("path");
 
-const transporter = nodemailer.createTransport({
+const gmailTransporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.REACT_APP_EMAIL,
@@ -12,14 +12,17 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// const options = {
-//   auth: {
-//     api_user: process.env.SENDGRID_USERNAME,
-//     api_key: process.env.SENDGRID_API_KEY,
-//   },
-// };
+const sendgridTransporter = nodemailer.createTransport(
+  nodemailerSendgrid({
+    apiKey: process.env.SENDGRID_API_KEY,
+  })
+);
 
-// const transporter = nodemailer.createTransport(mg(options));
+const sendgridMode =
+  process.env.REACT_APP_SENDGRID_MAILER &&
+  process.env.REACT_APP_SENDGRID_MAILER.toLowerCase() === "true";
+
+const transporter = sendgridMode ? sendgridTransporter : gmailTransporter;
 
 const template = (file, context) => {
   const source = fs.readFileSync(
@@ -33,14 +36,19 @@ const template = (file, context) => {
 
 const app_name = process.env.REACT_APP_NAME;
 const app_address = process.env.REACT_APP_ADDRESS;
-// const support_email = "support@" + process.env.REACT_APP_ROOT_URL;
-const support_email = process.env.REACT_APP_EMAIL;
-const home_url = process.env.REACT_APP_ROOT_URL;
+const support_email = sendgridMode
+  ? "support@" + process.env.REACT_APP_DOMAIN
+  : process.env.REACT_APP_EMAIL;
+const home_url = "https://" + process.env.REACT_APP_DOMAIN;
 const live_chat_url = process.env.REACT_APP_CHAT_URL;
 const date = new Date().getFullYear();
 const from = `${app_name} <${support_email}>`;
 
 const mailer = async (options) => {
+  if (options.inbound) {
+    const { inbound, ...inboundOptions } = options;
+    return transporter.sendMail(inboundOptions);
+  }
   const { template: file, context: mailContext, ...restOptions } = options;
 
   const context = {
@@ -53,6 +61,8 @@ const mailer = async (options) => {
     ...mailContext,
   };
   const mailOptions = { from, ...restOptions, html: template(file, context) };
+
+  if (!sendgridMode) mailOptions.from = from;
 
   return transporter.sendMail(mailOptions);
 };

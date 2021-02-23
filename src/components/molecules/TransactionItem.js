@@ -4,11 +4,11 @@ import styled from "styled-components";
 import Container from "../atoms/Container";
 import TransactionIcon from "../atoms/TransactionIcon";
 import Text from "../atoms/Text";
+import SubText from "../atoms/SubText";
 
 import { useCoinValue } from "../../hooks/useCoinValue";
 
 import { capitalise } from "../../utils/formatText";
-import { useWallets } from "../../hooks/useWallets";
 
 const Wrapper = styled(Container)`
   :last-child {
@@ -24,12 +24,7 @@ export const TransactionItem = ({ transaction, ...props }) => {
       ? `/dashboard/investment/${transaction._id}`
       : `/dashboard/transactions/${transaction._id}`;
 
-  const { wallets } = useWallets();
-  const selectedWallet = wallets?.find(
-    (wallet) => wallet.symbol === transaction.wallet
-  );
-
-  const { amount } = useCoinValue(selectedWallet?.symbol, transaction.amount);
+  const { amount } = useCoinValue(transaction.wallet, transaction.amount);
 
   return (
     <Wrapper
@@ -49,7 +44,7 @@ export const TransactionItem = ({ transaction, ...props }) => {
         flex="space-between"
       >
         <Container flexCol="flex-start" justify="space-between" o="hidden">
-          <Text font="13px" p="0" bold>
+          <Text font="12px" p="0" bold>
             {transaction.type === "referral"
               ? "Referral Bonus"
               : transaction.description ||
@@ -62,11 +57,16 @@ export const TransactionItem = ({ transaction, ...props }) => {
           </Text>
         </Container>
         <Container flexCol="flex-end" justify="center" w="auto">
-          <Text font="13px" p="0">
+          <Text font="12px" p="0">
             {amount + " " + transaction.wallet.toUpperCase()}
           </Text>
-          <Text font="12px" p="0">
-            {transaction.amount.toLocaleString()} USD
+          <Text font="11px" p="0">
+            {transaction.amount.toLocaleString()} USD{" "}
+            {transaction.type === "investment" ? (
+              <SubText p="0" font="inherit" bold color="success">
+                +{transaction.profit} USD
+              </SubText>
+            ) : undefined}
           </Text>
         </Container>
       </Container>
@@ -84,6 +84,8 @@ export const AdminTransactionItem = ({
       ? null
       : `/dashboard/admin/users/${transaction.user._id}/transactions/${transaction._id}`;
 
+  const { amount } = useCoinValue(transaction.symbol, transaction.amount);
+
   return (
     <Wrapper
       p="16px"
@@ -102,9 +104,9 @@ export const AdminTransactionItem = ({
         flex="space-between"
       >
         <Container flexCol="flex-start" justify="space-between" o="hidden">
-          <Text font="13px" p="0" bold>
+          <Text font="12px" p="0" bold>
             {showUsername
-              ? transaction.user.fullName
+              ? transaction.user?.fullName
               : `${transaction.wallet.toUpperCase()} ${capitalise(
                   transaction.type
                 )}`}
@@ -114,11 +116,16 @@ export const AdminTransactionItem = ({
           </Text>
         </Container>
         <Container flexCol="flex-end" justify="center">
-          <Text font="13px" p="0">
-            0.00367228 BTC
-          </Text>
           <Text font="12px" p="0">
-            {transaction.amount.toLocaleString()} USD
+            {amount + " " + transaction.wallet.toUpperCase()}
+          </Text>
+          <Text font="11px" p="0">
+            {transaction.amount.toLocaleString()} USD{" "}
+            {transaction.type === "investment" ? (
+              <SubText p="0" font="inherit" bold color="success">
+                +{transaction.profit} USD
+              </SubText>
+            ) : undefined}
           </Text>
         </Container>
       </Container>

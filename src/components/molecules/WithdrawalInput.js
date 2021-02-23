@@ -4,19 +4,21 @@ import { FaCreditCard } from "react-icons/fa";
 import Container from "../atoms/Container";
 import Text from "../atoms/Text";
 import SubText from "../atoms/SubText";
+import CardBrand from "../atoms/CardBrand";
+import BankBrand from "../atoms/BankBrand";
 
-import CardPicker from "../organisms/CardPicker";
+import WithdrawalPicker from "../organisms/WithdrawalPicker";
 
 import { useToggle } from "../../hooks/useToggle";
-import CardBrand from "../atoms/CardBrand";
 
-const CardInput = ({
+const WithdrawalInput = ({
   label,
   error,
   placeholder,
   hint,
-  card,
+  method,
   cards,
+  banks,
   noadd,
   onChange,
   name,
@@ -26,18 +28,19 @@ const CardInput = ({
 
   const { w, m, weight, display, color, ...styleProps } = props;
 
-  const change = (selectedCard) => {
+  const change = ({ selected, type }) => {
     return onChange({
       target: {
         name: name,
-        type: "card",
-        value: selectedCard._id,
-        rawValue: selectedCard,
+        type,
+        value: selected._id,
+        rawValue: selected,
       },
     });
   };
 
-  const cardName = cards.find((c) => c._id === card);
+  const card = cards.find((c) => c._id === method);
+  const bank = banks.find((b) => b._id === method);
 
   return (
     <Container
@@ -65,10 +68,10 @@ const CardInput = ({
         {...styleProps}
       >
         <SubText p="12px 0" font="inherit">
-          {cardName
-            ? `${cardName.issuer.toUpperCase()} **** ${cardName.cardNumber.slice(
-                -5
-              )}`
+          {card
+            ? `${card.issuer.toUpperCase()} **** ${card.cardNumber.slice(-5)}`
+            : bank
+            ? `${bank.bank.toUpperCase()} - ${bank.userId}`
             : placeholder}
         </SubText>
 
@@ -80,18 +83,21 @@ const CardInput = ({
           opacity="0.7"
           flexalign
         >
-          {cardName ? (
-            <CardBrand size="32px" logo={cardName.issuer} />
+          {card ? (
+            <CardBrand size="32px" logo={card.issuer} />
+          ) : bank ? (
+            <BankBrand size="32px" logo={bank.bank} />
           ) : (
             <FaCreditCard />
           )}
         </SubText>
       </Text>
-      <CardPicker
+      <WithdrawalPicker
         open={show}
         dismiss={toggle}
         title={hint || label}
         cards={cards}
+        banks={banks}
         action={change}
         noadd={noadd}
       />
@@ -99,4 +105,4 @@ const CardInput = ({
   );
 };
 
-export default CardInput;
+export default WithdrawalInput;

@@ -48,11 +48,11 @@ const transactionSchema = Joi.object({
   }),
 
   // withdrawal meta
-  card: Joi.when("type", {
+  method: Joi.when("type", {
     is: "withdrawal",
     then: Joi.string()
       .pattern(/^[0-9a-fA-F]{24}$/, {
-        name: "card id",
+        name: "method id",
       })
       .required(),
     otherwise: Joi.forbidden(),

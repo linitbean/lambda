@@ -24,7 +24,7 @@ const LoadingIcon = styled(CgSpinner)`
   height: 64px;
   margin: 12px;
 
-  color: ${({ bg, theme }) => "grey"};
+  color: ${({ theme }) => theme.colors.primary};
 
   animation: ${spin} 0.8s linear infinite;
 `;
@@ -60,7 +60,7 @@ const ProcessModal = ({
         maxW="480px"
         w="90vw"
         h="auto"
-        bg="bg"
+        bg="bgContrast"
         p="16px"
         radius="12px"
       >
@@ -92,7 +92,7 @@ const ProcessModal = ({
             <Spinner />
           </Button>
         ) : (
-          <Button bg="actionBg" p="12px" m="12px 0" full onClick={dismiss}>
+          <Button bg="actionBg" p="12px" m="12px 0" bold full onClick={dismiss}>
             Ok
           </Button>
         )}

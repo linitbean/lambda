@@ -124,7 +124,7 @@ function Invest({ action }) {
     errors,
   } = useForm({
     defaultValues: {
-      amount: null,
+      amount: 0,
       duration: 7,
     },
     resolver: yupResolver(schema),
@@ -253,7 +253,7 @@ function Transfer({ action }) {
     errors,
   } = useForm({
     defaultValues: {
-      amount: null,
+      amount: 0,
       email: "",
       receiver: "",
       receiver_name: "",

@@ -18,7 +18,11 @@ const UserItem = ({ user, ...props }) => {
       to={`/dashboard/admin/users/${user._id}`}
       {...props}
     >
-      <Avatar size="36px" name={user.fullName} />
+      <Avatar
+        size="36px"
+        name={user.fullName}
+        bg={user.meta.isEmailVerified ? undefined : "orange"}
+      />
       <Container
         w="calc(100% - 36px)"
         p="2px 0px 2px 12px"
@@ -26,16 +30,16 @@ const UserItem = ({ user, ...props }) => {
         flex="space-between"
       >
         <Container flexCol="flex-start" justify="space-between" o="hidden">
-          <Text font="13px" p="0" bold>
+          <Text font="12px" p="0" bold>
             {user.fullName}
           </Text>
-          <Text font="12px" p="0" opacity="0.6" bold>
+          <Text font="11px" p="0" opacity="0.6" bold>
             {user.email}
           </Text>
         </Container>
         {user.role ? (
           <Container flexCol="flex-end" justify="center">
-            <Text font="12px" p="0">
+            <Text font="11px" p="0">
               {capitalise(user.role)}
             </Text>
           </Container>

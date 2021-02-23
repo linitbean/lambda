@@ -148,6 +148,55 @@ const profileCardRemove = async (req, res, next) => {
   }
 };
 
+const profileBankCreate = async (req, res, next) => {
+  try {
+    // validated request body
+    const result = req.body;
+
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+    if (!user) return next(createError.NotFound("User not found"));
+
+    // create new card
+    user.banks.unshift(result);
+    await user.save();
+
+    const bank = user.banks[0];
+
+    res.json(bank);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const profileBankRemove = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+    if (!user) return next(createError.NotFound("User not found"));
+
+    const deletedBank = user.banks.find((bank) => bank.id === id);
+    if (!deletedBank) return next(createError.NotFound("User Bank not found"));
+
+    const updatedBanks = user.banks.map((bank) => {
+      if (bank.id === id) {
+        bank.removed = true;
+      }
+      return bank;
+    });
+    user.banks = updatedBanks;
+    await user.save();
+
+    res.json({ message: "User Bank successfully deleted" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const profileRequestEmailVerification = async (req, res, next) => {
   try {
     const id = req.user.id;
@@ -214,6 +263,8 @@ module.exports = {
   profilePasswordUpdate,
   profileCardCreate,
   profileCardRemove,
+  profileBankCreate,
+  profileBankRemove,
   profileRequestEmailVerification,
   profilePhotoReset,
   profilePhotoUpload,

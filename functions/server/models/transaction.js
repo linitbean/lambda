@@ -73,7 +73,7 @@ const TransactionSchema = new Schema({
   },
 
   // withdrawal meta
-  card: {
+  method: {
     type: Schema.Types.ObjectId,
   },
 });

@@ -9,6 +9,7 @@ import PersonalInformation from "./PersonalInformation";
 import Verification from "./Verification";
 import ChangePassword from "./ChangePassword";
 import Cards from "./Cards";
+import Banks from "./Banks";
 
 const Settings = () => {
   const { path, url } = useRouteMatch();
@@ -33,6 +34,9 @@ const Settings = () => {
         </Route>
         <Route path={`${path}/cards`}>
           <Cards />
+        </Route>
+        <Route path={`${path}/banks`}>
+          <Banks />
         </Route>
         <Route>
           <Redirect to={`${url}`} />

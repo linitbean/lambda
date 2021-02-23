@@ -7,6 +7,7 @@ import Container from "../../../../atoms/Container";
 import Text from "../../../../atoms/Text";
 import SubText from "../../../../atoms/SubText";
 import Input from "../../../../atoms/Input";
+import Select from "../../../../atoms/Select";
 import Textarea from "../../../../atoms/Textarea";
 import Button from "../../../../atoms/Button";
 
@@ -46,6 +47,8 @@ const SendEmail = () => {
   } = useProcess();
 
   const defaultValues = {
+    from: `support`,
+    customFrom: "",
     email: "",
     title: "",
     body: "",
@@ -56,6 +59,7 @@ const SendEmail = () => {
   const {
     register,
     handleSubmit,
+    watch,
     getValues,
     formState,
     reset,
@@ -67,6 +71,7 @@ const SendEmail = () => {
   });
 
   const { isSubmitting } = formState;
+  const { from } = watch();
 
   const close = () => {
     closeProcess();
@@ -74,8 +79,13 @@ const SendEmail = () => {
     setParagraphs(1);
   };
 
+  const DOMAIN = process.env.REACT_APP_DOMAIN;
+
   const sendMail = async () => {
-    const data = getValues();
+    const { customFrom, ...formData } = getValues();
+
+    let data = formData;
+    if (customFrom) data = { ...formData, from: customFrom };
 
     try {
       start();
@@ -97,6 +107,9 @@ const SendEmail = () => {
     }
   };
 
+  const sendgridMailer =
+    process.env.REACT_APP_SENDGRID_MAILER?.toLowerCase() === "true";
+
   return (
     <AdminOnly>
       <Container p="12px" borderbottom="1px solid" wide>
@@ -104,7 +117,7 @@ const SendEmail = () => {
           Send Email
         </Text>
         <Text p="12px 0" font="12px" opacity="0.6" bold multiline>
-          Send an email to any email address. Email would also be copied to
+          Send an email to any email address. Email will also be forwarded to
           app's email address
         </Text>
       </Container>
@@ -115,6 +128,32 @@ const SendEmail = () => {
         wide
         onSubmit={handleSubmit(openEmailModal)}
       >
+        {sendgridMailer && (
+          <>
+            <Select
+              radius="8px"
+              p="14px 12px"
+              label="Sender"
+              ref={register}
+              name="from"
+              error={errors.from?.message}
+            >
+              <option value="support">support@{DOMAIN}</option>
+              <option value="info">info@{DOMAIN}</option>
+              <option value="custom">Custom sender</option>
+            </Select>
+            {from === "custom" && (
+              <Input
+                label={`Sender Address (without @${DOMAIN})`}
+                placeholder="Sender Address"
+                radius="8px"
+                ref={register}
+                name="customFrom"
+                error={errors.customFrom?.message}
+              />
+            )}
+          </>
+        )}
         <Input
           type="email"
           label="Email Address"
@@ -176,7 +215,7 @@ const SendEmail = () => {
         )}
 
         {errors.server?.message && (
-          <Text font="12px" color="red" align="center" bold>
+          <Text font="12px" color="danger" align="center" bold>
             {errors.server?.message}
           </Text>
         )}

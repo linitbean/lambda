@@ -13,10 +13,10 @@ const Entry = ({ children, title, titleStyle, textStyle, ...props }) => {
       wide
       {...props}
     >
-      <Text p="0" font="13px" {...titleStyle}>
+      <Text p="0" font="12px" {...titleStyle}>
         {title}
       </Text>
-      <Text p="0" font="13px" bold {...textStyle}>
+      <Text p="0" font="12px" bold {...textStyle}>
         {children}
       </Text>
     </Container>

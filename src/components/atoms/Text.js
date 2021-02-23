@@ -17,7 +17,7 @@ const Text = styled.p.attrs(({ to, scrollto, href }) => ({
 
   font-weight: ${({ bold, weight }) =>
     weight ? weight : bold ? "600" : "400"};
-  font-size: ${({ font }) => (font ? font : "14px")};
+  font-size: ${({ font }) => (font ? font : "12px")};
   text-align: ${({ align }) => align && align};
 
   cursor: ${({ pointer }) => pointer && "pointer"};

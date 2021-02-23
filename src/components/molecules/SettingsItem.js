@@ -31,14 +31,14 @@ export const SettingsItem = ({
     <Container p="16px" flexCol="flex-start" w="calc(100% - 40px)">
       <Text
         p="0"
-        font="13px"
+        font="12px"
         m="0 0 8px 0"
         opacity={opacity || "0.6"}
         color={color}
       >
         {title}
       </Text>
-      <Text p="0" font="12px" multiline>
+      <Text p="0" font="11px" multiline>
         {body}
       </Text>
     </Container>

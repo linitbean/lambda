@@ -25,7 +25,7 @@ const SelectElement = styled.select`
 
   background-color: ${({ theme, bg }) =>
     theme.colors[bg] || bg || theme.colors.bg};
-  font-size: 14px;
+  font-size: 12px;
 
   color: ${({ theme, color }) =>
     theme.colors[color] || color || theme.colors.text};
@@ -47,7 +47,7 @@ const Label = styled.label`
   left: 12px;
   top: 10px;
 
-  font-size: 12px;
+  font-size: 11px;
   color: ${({ error, color, theme }) =>
     error
       ? theme.colors.danger

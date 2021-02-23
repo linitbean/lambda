@@ -23,6 +23,7 @@ import { useToggle } from "../../../../../hooks/useToggle";
 import axiosInstance from "../../../../../utils/axios";
 
 import { AdminOnly } from "../AdminChecker";
+import Select from "../../../../atoms/Select";
 
 const SendUserEmail = () => {
   const { userId } = useParams();
@@ -52,6 +53,8 @@ const SendUserEmail = () => {
   } = useProcess();
 
   const defaultValues = {
+    from: "support",
+    customFrom: "",
     title: "",
     body: "",
     body2: null,
@@ -61,6 +64,7 @@ const SendUserEmail = () => {
   const {
     register,
     handleSubmit,
+    watch,
     getValues,
     formState,
     reset,
@@ -72,6 +76,7 @@ const SendUserEmail = () => {
   });
 
   const { isSubmitting } = formState;
+  const { from } = watch();
 
   const close = () => {
     closeProcess();
@@ -79,8 +84,13 @@ const SendUserEmail = () => {
     setParagraphs(1);
   };
 
+  const DOMAIN = process.env.REACT_APP_DOMAIN;
+
   const sendMail = async () => {
-    const data = getValues();
+    const { customFrom, ...formData } = getValues();
+
+    let data = formData;
+    if (customFrom) data = { ...formData, from: customFrom };
 
     try {
       start();
@@ -90,6 +100,7 @@ const SendUserEmail = () => {
       });
       complete("Email sent successfully");
     } catch (err) {
+      console.log(err.response);
       fail("Email not sent");
       setError(
         "server",
@@ -103,6 +114,9 @@ const SendUserEmail = () => {
       );
     }
   };
+
+  const sendgridMailer =
+    process.env.REACT_APP_SENDGRID_MAILER?.toLowerCase() === "true";
 
   return (
     <AdminOnly>
@@ -122,6 +136,32 @@ const SendUserEmail = () => {
         wide
         onSubmit={handleSubmit(openEmailModal)}
       >
+        {sendgridMailer && (
+          <>
+            <Select
+              radius="8px"
+              p="14px 12px"
+              label="Sender"
+              ref={register}
+              name="from"
+              error={errors.from?.message}
+            >
+              <option value="support">support@{DOMAIN}</option>
+              <option value="info">info@{DOMAIN}</option>
+              <option value="custom">Custom sender</option>
+            </Select>
+            {from === "custom" && (
+              <Input
+                label={`Sender Address (without @${DOMAIN})`}
+                placeholder="Sender Address"
+                radius="8px"
+                ref={register}
+                name="customFrom"
+                error={errors.customFrom?.message}
+              />
+            )}
+          </>
+        )}
         <Input
           label="Title"
           placeholder="Title"
@@ -173,7 +213,7 @@ const SendUserEmail = () => {
         )}
 
         {errors.server?.message && (
-          <Text color="red" align="center" bold>
+          <Text font="12px" color="danger" align="center" bold>
             {errors.server?.message}
           </Text>
         )}

@@ -119,6 +119,9 @@ const Home = () => {
     });
   };
 
+  const bankWithdrawal =
+    process.env.REACT_APP_BANK_WITHDRAWAL?.toLowerCase() === "true";
+
   return (
     <Container p="12px 0" wide>
       <Container flexCol="center" p="12px" wide>
@@ -155,6 +158,13 @@ const Home = () => {
           body="Add and Manage user cards"
           to={`${url}/cards`}
         />
+        {bankWithdrawal && (
+          <SettingsItem
+            title="Banks"
+            body="Add and Manage user banks"
+            to={`${url}/banks`}
+          />
+        )}
         <SettingsItem
           title="Send Email"
           body="Send email to user's email address"

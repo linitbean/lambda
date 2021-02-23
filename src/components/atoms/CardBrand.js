@@ -21,7 +21,7 @@ const CardBrand = ({ logo, ...props }) => {
   if (!supportedCards.includes(logo)) return null;
   return (
     <Icon
-      fallback={() => "error"}
+      fallback={() => ""}
       loading={() => <Loader w="60px" h={props.size} radius="4px" />}
       src={`/assets/icons/card/${logo.toLowerCase()}.svg`}
       {...props}

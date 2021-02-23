@@ -78,7 +78,7 @@ const Login = () => {
         <Input
           type="email"
           radius="6px"
-          p="14px 12px"
+          p="12px"
           m="12px 0"
           placeholder="Email Address"
           label="Email Address"
@@ -90,7 +90,7 @@ const Login = () => {
         <Input
           type={showPassword ? "text" : "password"}
           radius="6px"
-          p="14px 12px"
+          p="12px"
           m="12px 0"
           placeholder="Password"
           label="Password"
@@ -117,6 +117,7 @@ const Login = () => {
           radius="2px"
           p="14px 12px"
           m="12px 0"
+          font="13px"
           full
           bold
           disabled={isSubmitting}

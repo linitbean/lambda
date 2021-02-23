@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   min-width: var(--size);
 
   border-radius: 50%;
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ bg, theme }) => theme.colors[bg] || bg || theme.colors.primary};
 
   display: flex;
   justify-content: center;

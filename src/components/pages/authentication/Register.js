@@ -68,7 +68,7 @@ const Register = () => {
         <Input
           type="email"
           radius="6px"
-          p="14px 12px"
+          p="12px"
           m="12px 0"
           placeholder="Email Address"
           label="Email Address"
@@ -80,7 +80,7 @@ const Register = () => {
           <Input
             w="calc(50% - 6px)"
             radius="6px"
-            p="14px 12px"
+            p="12px"
             label="First Name"
             placeholder="First Name"
             ref={register}
@@ -90,7 +90,7 @@ const Register = () => {
           <Input
             w="calc(50% - 6px)"
             radius="6px"
-            p="14px 12px"
+            p="12px"
             label="Last Name"
             placeholder="Last Name"
             ref={register}
@@ -101,7 +101,7 @@ const Register = () => {
         <Input
           type={showPassword ? "text" : "password"}
           radius="6px"
-          p="14px 12px"
+          p="12px"
           m="12px 0"
           placeholder="Password"
           label="Password"
@@ -112,7 +112,7 @@ const Register = () => {
         <Input
           type={showPassword ? "text" : "password"}
           radius="6px"
-          p="14px 12px"
+          p="12px"
           m="12px 0"
           placeholder="Confirm Password"
           label="Confirm Password"
@@ -133,6 +133,7 @@ const Register = () => {
           radius="2px"
           p="14px 12px"
           m="12px 0"
+          font="13px"
           full
           bold
           disabled={isSubmitting}

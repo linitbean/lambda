@@ -59,6 +59,13 @@ router.delete(
   UserController.userDelete
 );
 
+// clear unverified users
+router.post(
+  "/clear-unverified",
+  permissions(["admin"]),
+  UserController.userClearUnverified
+);
+
 // create user wallet
 router.post(
   "/:id/wallets",
@@ -93,6 +100,13 @@ router.delete(
   "/:id/cards/:cardId",
   permissions(["admin"]),
   UserController.userCardDelete
+);
+
+// delete user bank
+router.delete(
+  "/:id/banks/:bankId",
+  permissions(["admin"]),
+  UserController.userBankDelete
 );
 
 module.exports = router;

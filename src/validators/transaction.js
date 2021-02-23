@@ -36,9 +36,9 @@ export const transactionSchema = yup.object().shape({
       .required("Recipient Email is required"),
   }),
 
-  card: yup.string().when("type", {
+  method: yup.string().when("type", {
     is: "withdrawal",
-    then: yup.string().required("Card is required for Withdrawal"),
+    then: yup.string().required("Withdrawal method is required"),
   }),
 
   profit: yup.number().label("Profit").positive(),
@@ -59,5 +59,5 @@ export const withdrawalSchema = yup.object().shape({
     .number()
     .required("Amount is required")
     .min(minimumWithdrawal, "Amount too low"),
-  card: yup.string().required("Card is required"),
+  method: yup.string().required("Withdrawal method is required"),
 });

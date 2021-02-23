@@ -47,10 +47,10 @@ const Payments = () => {
             flexalign="true"
             to="/dashboard"
           >
-            <SubText bold="true" p="0" m="0 8px 0 0" flexalign>
+            <SubText font="inherit" bold="true" p="0" m="0 8px 0 0" flexalign>
               <FaArrowLeft />
             </SubText>
-            <SubText bold="true" p="0" m="0">
+            <SubText font="inherit" bold="true" p="0" m="0">
               Go Back
             </SubText>
           </Button>

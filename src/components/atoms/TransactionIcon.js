@@ -19,7 +19,12 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme, type }) =>
+    ["deposit", "investment"].includes(type)
+      ? theme.colors.success
+      : ["withdrawal", "transfer"].includes(type)
+      ? theme.colors.danger
+      : theme.colors.actionBg};
   color: white;
 `;
 

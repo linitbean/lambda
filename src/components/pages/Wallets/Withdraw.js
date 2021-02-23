@@ -13,7 +13,7 @@ import Spinner from "../../atoms/Spinner";
 
 import WalletBalance from "../../molecules/WalletBalance";
 import ControlledWalletInput from "../../molecules/ControlledWalletInput";
-import ControlledCardInput from "../../molecules/ControlledCardInput";
+import ControlledWithdrawalInput from "../../molecules/ControlledWithdrawalInput";
 
 import RecentWithdrawals from "../../organisms/RecentWithdrawals";
 import ConfirmationModal from "../../organisms/ConfirmationModal";
@@ -70,9 +70,9 @@ const Withdraw = () => {
     errors,
   } = useForm({
     defaultValues: {
-      amount: null,
+      amount: 0,
       wallet: state?.wallet || "BTC",
-      card: "",
+      method: "",
     },
     resolver: yupResolver(withdrawalSchema),
   });
@@ -156,8 +156,8 @@ const Withdraw = () => {
 
       <Container
         as="form"
-        p="0 12px 24px"
-        m="12px 0"
+        p="12px 12px 24px"
+        m="24px 0"
         bg="actionBg"
         wide
         onSubmit={handleSubmit(openWithdrawalModal)}
@@ -201,15 +201,16 @@ const Withdraw = () => {
           name="amount"
           error={errors.amount?.message}
         />
-        <ControlledCardInput
+        <ControlledWithdrawalInput
           color="white"
           radius="8px"
           label="Withdrawal Method"
-          placeholder="Select Card"
+          placeholder="Withdrawal Method"
           cards={profile.cards}
+          banks={profile.banks}
           control={control}
-          name="card"
-          error={errors.card?.message}
+          name="method"
+          error={errors.method?.message}
         />
 
         <Button

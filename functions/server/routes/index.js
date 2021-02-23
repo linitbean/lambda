@@ -20,6 +20,7 @@ routes.get("/", (req, res) => {
 
 routes.use("/auth", authRoute);
 routes.use("/profile", profileRoute);
+routes.use("/core", servicesRoute);
 
 // apply auth middleware to require req user beyond this point
 routes.use(auth);
@@ -29,6 +30,5 @@ routes.use("/wallets", walletRoute);
 routes.use("/messages", messageRoute);
 routes.use("/payments", paymentRoute);
 routes.use("/transactions", transactionRoute);
-routes.use("/core", servicesRoute);
 
 module.exports = routes;

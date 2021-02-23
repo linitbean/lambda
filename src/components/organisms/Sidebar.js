@@ -73,7 +73,7 @@ const Sidebar = ({ open, toggle }) => {
   const { show: showLogoutModal, toggle: toggleLogoutModal } = useToggle();
 
   const switchTheme =
-    process.env.REACT_APP_THEME_SWITCH.toLowerCase() === "true";
+    process.env.REACT_APP_THEME_SWITCH?.toLowerCase() === "true";
 
   return (
     <Container

@@ -104,7 +104,7 @@ const Referral = () => {
 
         {process.env.REACT_APP_REFERRAL_BONUS && (
           <Text p="12px 0" font="12px" align="center" multiline>
-            Reqister under {referrer.fullName} and you both earn{" "}
+            Register under {referrer.fullName} and you both earn{" "}
             <SubText font="inherit" p="0" bold>
               ${process.env.REACT_APP_REFERRAL_BONUS}
             </SubText>{" "}

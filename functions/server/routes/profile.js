@@ -10,13 +10,12 @@ const validate = require("../middlewares/validate");
 
 // validators
 const { cardSchema } = require("../validators/card");
+const { bankSchema } = require("../validators/bank");
 const {
   profileByEmailSchema,
   profileUpdateSchema,
   profilePasswordUpdateSchema,
   profilePhotoSchema,
-  identitySchema,
-  residenceSchema,
 } = require("../validators/profile");
 
 // friend profile
@@ -50,6 +49,12 @@ router.post("/card", validate(cardSchema), ProfileController.profileCardCreate);
 
 // remove card
 router.delete("/card/:id", ProfileController.profileCardRemove);
+
+// add bank
+router.post("/bank", validate(bankSchema), ProfileController.profileBankCreate);
+
+// remove bank
+router.delete("/bank/:id", ProfileController.profileBankRemove);
 
 // request email verification
 router.post(

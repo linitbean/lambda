@@ -81,6 +81,19 @@ const userDelete = async (req, res, next) => {
   }
 };
 
+const userClearUnverified = async (req, res, next) => {
+  try {
+    // delete unverified users
+    const { deletedCount } = await User.deleteMany({
+      "meta.isEmailVerified": false,
+    });
+
+    res.json({ message: `${deletedCount} users successfully deleted` });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const userWalletCreate = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -186,15 +199,39 @@ const userCardDelete = async (req, res, next) => {
   }
 };
 
+const userBankDelete = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+
+    const id = req.params.bankId;
+
+    const user = await User.findById(userId);
+    if (!user) return next(createError.NotFound("User not found"));
+
+    const deletedBank = user.banks.find((bank) => bank.id === id);
+    if (!deletedBank) return next(createError.NotFound("User Bank not found"));
+
+    const updatedBanks = user.banks.filter((bank) => bank.id !== id);
+    user.banks = updatedBanks;
+    await user.save();
+
+    res.json({ message: "User Bank successfully deleted" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   userList,
   userCreate,
   userDetail,
   userUpdate,
   userDelete,
+  userClearUnverified,
   userWalletCreate,
   userWalletList,
   userWalletDetail,
   userWalletDelete,
   userCardDelete,
+  userBankDelete,
 };

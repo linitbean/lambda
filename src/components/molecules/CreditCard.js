@@ -27,7 +27,7 @@ const cardColor = (issuer) => {
     case "discover":
       return { bg: "#E3D8C9", text: "black" };
     default:
-      return { bg: "#FE5D26", text: "white" };
+      return { bg: "#321c10", text: "white" };
   }
 };
 
@@ -61,7 +61,7 @@ export const CreditCard = ({ card, action, active, ...props }) => {
         </Container>
         <Container flex="space-between">
           <Text p="0" opacity="0.8" bold>
-            {replaceSnake(card.issuer)}
+            {card.cardHolder}
           </Text>
           <Text font="12px" p="0" opacity="0.8" bold>
             {card.expDate}
@@ -80,10 +80,10 @@ export const NoCard = () => {
       radius="14px"
       pointer
       flex="center"
-      bg="grey"
+      bg="secondary"
       // border="1px dashed"
     >
-      <Text p="0" opacity="0.6">
+      <Text p="0" font="13px" opacity="0.6">
         No Saved Card
       </Text>
     </Container>

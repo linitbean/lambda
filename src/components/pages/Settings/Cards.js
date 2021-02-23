@@ -87,11 +87,6 @@ const Cards = () => {
     try {
       await axiosInstance.delete("/profile/card/" + activeCard._id);
       await mutateProfile();
-      if (profile?.cards.length) {
-        setActiveCard(profile.cards[0]);
-      } else {
-        setActiveCard(null);
-      }
     } catch (err) {
       // console.log(err);
     }

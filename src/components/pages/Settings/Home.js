@@ -23,6 +23,9 @@ const Home = () => {
 
   const { profile } = useProfile();
 
+  const bankWithdrawal =
+    process.env.REACT_APP_BANK_WITHDRAWAL?.toLowerCase() === "true";
+
   return (
     <Container p="12px" wide>
       <Container p="24px" flexCol="center" position="relative" wide>
@@ -109,6 +112,13 @@ const Home = () => {
           body="Add new card or manage existing withdrawal methods"
           to={`${url}/cards`}
         />
+        {bankWithdrawal && (
+          <SettingsItem
+            title="Manage Banks"
+            body="Add new card or manage existing withdrawal methods"
+            to={`${url}/banks`}
+          />
+        )}
         <SettingsItem
           title="Change Password"
           body="Updating your password would log you out of all devices"

@@ -1,13 +1,14 @@
 const mailer = require("../configs/mail");
 
-const appUrl = process.env.REACT_APP_URL;
+const app_name = process.env.REACT_APP_NAME;
+const appUrl = "https://app." + process.env.REACT_APP_DOMAIN;
 
 const welcomeMail = async (user, emailToken) => {
   const verificationLink = appUrl + "/account/verify-email/" + emailToken;
 
   const resp = await mailer({
     to: user.email,
-    subject: "Welcome to " + process.env.REACT_APP_NAME,
+    subject: "Welcome to " + app_name,
     template: "welcome",
     context: {
       name: user.firstName,
@@ -46,12 +47,25 @@ const passwordResetMail = async (user, passwordToken) => {
   return resp;
 };
 
-const customMail = async ({ email, title, body, body2, body3 }) => {
+const customMailer = async ({ from, email, title, body, body2, body3 }) => {
   const resp = await mailer({
-    to: [email, process.env.REACT_APP_EMAIL],
+    from: `${app_name} <${from}@${process.env.REACT_APP_DOMAIN}>`,
+    to: email,
     subject: title,
     template: "custom",
     context: { title, body, body2, body3 },
+  });
+  return resp;
+};
+
+const inboundMailer = async ({ from, subject, text, html }) => {
+  const resp = await mailer({
+    inbound: true,
+    from: `${app_name} Postman <postman@${process.env.REACT_APP_DOMAIN}>`,
+    to: process.env.REACT_APP_EMAIL,
+    subject: subject + " - from: " + from,
+    text,
+    html,
   });
   return resp;
 };
@@ -60,5 +74,6 @@ module.exports = {
   welcomeMail,
   emailVerificationMail,
   passwordResetMail,
-  customMail,
+  customMailer,
+  inboundMailer,
 };

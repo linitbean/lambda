@@ -14,7 +14,7 @@ const Button = styled.button.attrs(({ to, scrollto }) => ({
   padding: 12px;
   min-height: 24px;
   /* min-width: 48px; */
-  font-size: 14px;
+  font-size: 12px;
 
   white-space: nowrap;
   overflow: hidden;

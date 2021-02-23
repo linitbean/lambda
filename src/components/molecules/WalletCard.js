@@ -66,7 +66,7 @@ const WalletCard = ({ wallet, action, ...props }) => {
         />
       </Container>
       <Container p="0 12px" flex="space-between" wide>
-        <Text p="0" font="14px" opacity="0.8" bold>
+        <Text p="0" font="13px" opacity="0.8" bold>
           {rate} USD
         </Text>
         <Text

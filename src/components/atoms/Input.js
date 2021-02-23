@@ -5,7 +5,7 @@ const Wrapper = styled.div`
   position: relative;
   display: ${({ display }) => display && display};
 
-  font-size: 14px;
+  font-size: 12px;
 
   width: ${({ w }) => w || "100%"};
   margin: ${({ m }) => m || "8px 0"};
@@ -18,7 +18,7 @@ const InputElement = styled.input`
   padding: ${({ p }) => p || "12px"};
   width: 100%;
 
-  font-size: 14px;
+  font-size: 12px;
 
   background-color: ${({ bg, theme }) =>
     theme.colors[bg] || bg || theme.colors.bg};
@@ -51,7 +51,7 @@ const Label = styled.label`
   left: 12px;
   top: 10px;
 
-  font-size: 12px;
+  font-size: 11px;
   color: ${({ error, color, theme }) =>
     error
       ? theme.colors.danger

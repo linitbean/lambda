@@ -2,7 +2,7 @@ const User = require("../models/user");
 const Transaction = require("../models/transaction");
 const Wallet = require("../models/wallet");
 
-const { customMail } = require("../utils/mailer");
+const { customMailer, inboundMailer } = require("../utils/mailer");
 
 const statistics = async (req, res, next) => {
   try {
@@ -21,7 +21,7 @@ const sendMail = async (req, res, next) => {
     // validated request body
     const result = req.body;
 
-    await customMail(result);
+    await customMailer(result);
 
     res.json({ message: "Email sent successfully" });
   } catch (err) {
@@ -31,14 +31,18 @@ const sendMail = async (req, res, next) => {
 
 const inboundMail = async (req, res, next) => {
   try {
-    const ctx = req.body;
+    const from = req.body.from;
+    const subject = req.body.subject;
+    const text = req.body.text;
+    const html = req.body.html;
 
-    await customMail(result);
+    await inboundMailer({ from, subject, text, html });
 
-    res.json({ message: "Email sent successfully" });
+    // edit
+    res.json({ message: "Email received successfully" });
   } catch (err) {
     next(err);
   }
 };
 
-module.exports = { statistics, sendMail };
+module.exports = { statistics, sendMail, inboundMail };

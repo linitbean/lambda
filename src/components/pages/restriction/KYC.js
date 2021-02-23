@@ -90,7 +90,7 @@ const KYC = () => {
           bold
           multiline
         >
-          Kindly complete identification process to verify your account
+          Kindly complete identification process to complete verification
         </Text>
       </Container>
       <Container as="form" wide onSubmit={handleSubmit(onSubmit)}>
@@ -98,7 +98,7 @@ const KYC = () => {
         <input hidden ref={register} name="lastName" />
         <Select
           radius="6px"
-          p="14px 12px"
+          p="12px"
           label="Country"
           ref={register}
           name="profile.country"
@@ -112,7 +112,7 @@ const KYC = () => {
         </Select>
         <Input
           radius="6px"
-          p="14px 12px"
+          p="12px"
           label="City"
           placeholder="City"
           ref={register}
@@ -121,7 +121,7 @@ const KYC = () => {
         />
         <PhoneInput
           radius="6px"
-          p="14px 12px"
+          p="12px"
           type="tel"
           label="Phone Number"
           placeholder="Phone Number"
@@ -131,7 +131,7 @@ const KYC = () => {
         />
         <Select
           radius="6px"
-          p="14px 12px"
+          p="12px"
           label="Gender"
           ref={register}
           name="profile.gender"
@@ -143,7 +143,7 @@ const KYC = () => {
         </Select>
         <ControlledDateInput
           radius="6px"
-          p="14px 12px"
+          p="12px"
           label="Date of Birth"
           hint="Pick Date"
           placeholder="Date of Birth"
@@ -158,6 +158,7 @@ const KYC = () => {
           radius="2px"
           p="14px 12px"
           m="12px 0"
+          font="13px"
           full
           bold
           disabled={isSubmitting}

@@ -20,8 +20,8 @@ const Auth = ({ children }) => {
         m="64px 0"
         bg="bgContrast"
         radius="6px"
-        maxW="calc(100vw - 24px)"
-        w="460px"
+        maxW="calc(100vw - 28px)"
+        w="400px"
         h="auto"
       >
         {children}

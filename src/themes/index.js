@@ -10,6 +10,7 @@ const colors = {
   primary: process.env.REACT_APP_PRIMARY_COLOR || "#68CA6D" || "#0095eb",
   board: process.env.REACT_APP_BOARD_COLOR || "#0095eb",
   chart: process.env.REACT_APP_CHART_COLOR || "#68CA6D",
+  actionBg: process.env.REACT_APP_ACTION_BG,
   danger: "#FF4747",
   success: "#68CA6D",
 };
@@ -25,7 +26,7 @@ export const light = {
     skeleton: "linear-gradient(-90deg, #f0f0f0 0%, #f8f8f8 50%, #f0f0f0 100%)",
 
     //computed
-    actionBg: "#383B42",
+    actionBg: colors.actionBg || "#383B42",
     secondary: "#EBEBEB",
   },
 };
@@ -41,7 +42,7 @@ export const dark = {
     skeleton: "linear-gradient(-90deg, #2f3137 0%, #242526 50%, #2f3137 100%)",
 
     //computed
-    actionBg: "#335C67",
+    actionBg: colors.actionBg || "#335C67",
     secondary: "#7B818E",
   },
 };

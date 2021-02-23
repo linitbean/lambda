@@ -10,7 +10,7 @@ const Wrapper = styled(Link).attrs(({ to, href }) => ({
   padding: 12px 16px;
   margin-bottom: 12px;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 12px;
 
   color: ${({ color, theme }) => theme.colors[color] || (color && color)};
 

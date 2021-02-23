@@ -75,7 +75,7 @@ export const AdminWalletItem = ({
           ? `/dashboard/admin/wallets/${wallet.symbol.toLowerCase()}`
           : undefined
       }
-      onClick={action && (() => action(wallet))}
+      onClick={action ? () => action(wallet) : undefined}
       {...props}
     >
       <WalletIcon symbol={wallet.symbol} />

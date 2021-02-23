@@ -107,7 +107,11 @@ const AuthNavBar = () => {
       <Backdrop open={dropdownOpen} onClick={toggleDropdown} />
       <Dropdown open={dropdownOpen}>
         <Container p="12px" wide>
-          <Text as="a" display="block" href={process.env.REACT_APP_ROOT_URL}>
+          <Text
+            as="a"
+            display="block"
+            href={`https://${process.env.REACT_APP_DOMAIN}`}
+          >
             Home
           </Text>
           <Text display="block" to="/account/login">

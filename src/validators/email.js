@@ -1,6 +1,8 @@
 import * as yup from "yup";
 
 export const emailSchema = yup.object().shape({
+  from: yup.string(),
+  customFrom: yup.string().matches(/^[a-zA-Z]+$/, "Invalid sender"),
   email: yup
     .string()
     .required("Email is required")
@@ -14,6 +16,8 @@ export const emailSchema = yup.object().shape({
 });
 
 export const userEmailSchema = yup.object().shape({
+  from: yup.string(),
+  customFrom: yup.string().matches(/^[a-zA-Z]+$/, "Invalid sender"),
   title: yup.string().required("Title is required"),
   body: yup.string().required("Message body is required"),
   body2: yup.string(),

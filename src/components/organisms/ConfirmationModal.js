@@ -12,7 +12,7 @@ const InfoIcon = styled(FaInfoCircle)`
   width: 64px;
   height: 64px;
   margin: 12px;
-  color: ${({ theme }) => theme.colors.actionBg};
+  color: ${({ theme }) => theme.colors.primary};
 `;
 
 const ConfirmationModal = ({
@@ -35,7 +35,7 @@ const ConfirmationModal = ({
         maxW="480px"
         w="90vw"
         h="auto"
-        bg="bg"
+        bg="bgContrast"
         p="16px"
         radius="12px"
       >
