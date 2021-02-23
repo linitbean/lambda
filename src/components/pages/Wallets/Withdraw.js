@@ -105,7 +105,7 @@ const Withdraw = () => {
     try {
       start();
       await axiosInstance.post("/transactions", transaction);
-      complete("Withdrawal Successful");
+      complete("Request successful! You will be contacted you soon");
       mutateTransactions();
       reset({
         amount: null,
