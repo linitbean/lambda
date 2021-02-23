@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import Container from "../atoms/Container";
-import Text from "../atoms/Text";
 import SubText from "../atoms/SubText";
 import Input from "../atoms/Input";
 import Button from "../atoms/Button";
