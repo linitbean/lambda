@@ -107,8 +107,8 @@ const SendEmail = () => {
     }
   };
 
-  const sendgridMailer =
-    process.env.REACT_APP_SENDGRID_MAILER?.toLowerCase() === "true";
+  const advancedMailer =
+    process.env.REACT_APP_ADVANCED_MAILER?.toLowerCase() === "true";
 
   return (
     <AdminOnly>
@@ -128,7 +128,7 @@ const SendEmail = () => {
         wide
         onSubmit={handleSubmit(openEmailModal)}
       >
-        {sendgridMailer && (
+        {advancedMailer && (
           <>
             <Select
               radius="8px"
