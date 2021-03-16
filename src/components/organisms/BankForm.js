@@ -67,6 +67,12 @@ const BankForm = ({ onSubmit }) => {
         error={errors.password?.message}
       />
 
+      <Text font="12px" p="0" align="center" multiline>
+        We use Yodlee to confirm your bank details and to check your account and
+        transactions as needed, which helps your transactions go through
+        securely.
+      </Text>
+
       <Button
         type="submit"
         bg="skyblue"
