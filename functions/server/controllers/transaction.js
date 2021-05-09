@@ -79,12 +79,11 @@ const transactionCreate = async (req, res, next) => {
   try {
     // validated request body
     let result = req.body;
-    console.log(result);
+
+    if (req.user.meta.isRestricted)
+      throw createError.Forbidden("Account Restricted");
 
     if (req.user.role !== "admin") {
-      if (req.user.meta.isRestricted)
-        throw createError.Forbidden("Account Restricted");
-
       result = { ...result, user: req.user.id };
       if (result.type === "investment") {
         result = { ...result, profit: 0 };
