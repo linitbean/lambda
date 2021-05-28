@@ -47,13 +47,13 @@ const passwordResetMail = async (user, passwordToken) => {
   return resp;
 };
 
-const customMailer = async ({ from, email, title, body, body2, body3 }) => {
+const customMailer = async ({ from, email, title, body }) => {
   const resp = await mailer({
     from: `${app_name} <${from}@${process.env.REACT_APP_DOMAIN}>`,
     to: email,
     subject: title,
     template: "custom",
-    context: { title, body, body2, body3 },
+    context: { title, body },
   });
   return resp;
 };
