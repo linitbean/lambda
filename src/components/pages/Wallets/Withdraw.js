@@ -40,16 +40,8 @@ const Withdraw = () => {
   const { wallets, loading: loadingWallets } = useWallets();
   const { mutate: mutateTransactions } = useTransactions();
 
-  const {
-    show,
-    processing,
-    response,
-    success,
-    start,
-    complete,
-    fail,
-    close,
-  } = useProcess();
+  const { show, processing, response, success, start, complete, fail, close } =
+    useProcess();
 
   const {
     show: showWithdrawalModal,
@@ -73,6 +65,7 @@ const Withdraw = () => {
       amount: 0,
       wallet: state?.wallet || "BTC",
       method: "",
+      address: "",
     },
     resolver: yupResolver(withdrawalSchema),
   });
@@ -94,6 +87,11 @@ const Withdraw = () => {
 
   const makeWithdrawal = async () => {
     const formData = getValues();
+    const isAddress = formData.method?.startsWith("address://");
+    if (isAddress) {
+      formData.address = formData.method?.slice("address://".length);
+      delete formData.method;
+    }
     if (formData.amount > balance) {
       setError("amount", {
         type: "server",
@@ -112,7 +110,7 @@ const Withdraw = () => {
         wallet: formData.wallet,
       });
     } catch (err) {
-      // console.log(err.response);
+      console.log(err.response);
       fail(
         err.response.data.message === "Account Restricted"
           ? "Your Account has been temporarily restricted"

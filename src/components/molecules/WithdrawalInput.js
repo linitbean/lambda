@@ -33,7 +33,7 @@ const WithdrawalInput = ({
       target: {
         name: name,
         type,
-        value: selected._id,
+        value: type === "address" ? selected : selected._id,
         rawValue: selected,
       },
     });
@@ -41,6 +41,7 @@ const WithdrawalInput = ({
 
   const card = cards.find((c) => c._id === method);
   const bank = banks.find((b) => b._id === method);
+  const address = method?.startsWith("address://");
 
   return (
     <Container
@@ -72,6 +73,8 @@ const WithdrawalInput = ({
             ? `${card.issuer.toUpperCase()} **** ${card.cardNumber.slice(-5)}`
             : bank
             ? `${bank.bank.toUpperCase()} - ${bank.userId}`
+            : address
+            ? method?.slice("address://".length)
             : placeholder}
         </SubText>
 
