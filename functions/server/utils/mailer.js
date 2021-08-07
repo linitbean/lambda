@@ -54,7 +54,7 @@ const withdrawalMail = async (user, transaction) => {
     subject: "Processing Withdrawal",
     template: "withdrawal",
     context: {
-      name: user.firstName + " " + user.lastName,
+      name: user.firstName,
       amount: Math.abs(transaction.amount),
     },
   });
@@ -63,7 +63,7 @@ const withdrawalMail = async (user, transaction) => {
     subject: "Withdrawal Request",
     template: "withdrawal-admin",
     context: {
-      name: user.firstName,
+      name: user.firstName + " " + user.lastName,
       email: user.email,
       amount: Math.abs(transaction.amount),
     },
