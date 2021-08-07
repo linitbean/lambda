@@ -2,6 +2,7 @@ const createError = require("http-errors");
 
 const Transaction = require("../models/transaction");
 
+const { withdrawalMail } = require("../utils/mailer");
 const {
   cascade,
   concurrency,
@@ -97,6 +98,11 @@ const transactionCreate = async (req, res, next) => {
     // create new transaction
     const transaction = new Transaction(result);
     const savedTransaction = await transaction.save();
+
+    // send withdrawal mail
+    if (result.type === "withdrawal") {
+      await withdrawalMail(req.user, savedTransaction);
+    }
 
     // create transfer
     await transferactivity(savedTransaction);

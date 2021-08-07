@@ -29,16 +29,8 @@ import { rawBalance } from "../../utils/parseBalance";
 const WalletActionTab = (props) => {
   const { profile } = useProfile();
   const { mutate } = useTransactions();
-  const {
-    show,
-    processing,
-    response,
-    success,
-    start,
-    complete,
-    fail,
-    close,
-  } = useProcess();
+  const { show, processing, response, success, start, complete, fail, close } =
+    useProcess();
 
   const makeTransaction = async (tx) => {
     // console.log("submitting");
@@ -107,6 +99,7 @@ function Invest({ action }) {
   const schema = yup.object().shape({
     amount: yup
       .number()
+      .typeError("Minimum amount is 100 USD")
       .required("Amount is required")
       .min(100, "Minimum amount is 100 USD")
       .max(balance, "You do not have sufficient balance"),
@@ -124,7 +117,7 @@ function Invest({ action }) {
     errors,
   } = useForm({
     defaultValues: {
-      amount: 0,
+      amount: null,
       duration: 7,
     },
     resolver: yupResolver(schema),
@@ -244,6 +237,7 @@ function Transfer({ action }) {
   const schema = yup.object().shape({
     amount: yup
       .number()
+      .typeError("Minimum amount is 100 USD")
       .required("Amount is required")
       .min(100, "Minimum amount is 100 USD")
       .max(balance, "You do not have sufficient balance"),
@@ -262,7 +256,7 @@ function Transfer({ action }) {
     errors,
   } = useForm({
     defaultValues: {
-      amount: 0,
+      amount: null,
       email: "",
       receiver: "",
       receiver_name: "",

@@ -62,7 +62,7 @@ const Withdraw = () => {
     errors,
   } = useForm({
     defaultValues: {
-      amount: 0,
+      amount: null,
       wallet: state?.wallet || "BTC",
       method: "",
       address: "",
@@ -103,7 +103,9 @@ const Withdraw = () => {
     try {
       start();
       await axiosInstance.post("/transactions", transaction);
-      complete("Request successful! You will be contacted you soon");
+      complete(
+        "Your withdrawal is currently being processed, you will be contacted by email soon"
+      );
       mutateTransactions();
       reset({
         amount: null,
@@ -233,7 +235,7 @@ const Withdraw = () => {
         />
 
         <ProcessModal
-          title="Completing Withdrawal"
+          title="Request Successful"
           open={show}
           processing={processing}
           response={response}
