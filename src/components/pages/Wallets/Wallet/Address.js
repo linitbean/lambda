@@ -8,14 +8,21 @@ import Text from "../../../atoms/Text";
 import QRCode from "../../../atoms/QRCode";
 
 import { useWallet } from "../../../../hooks/useWallets";
+import { useProfile } from "../../../../hooks/useProfile";
 
 const Address = () => {
   const { symbol } = useParams();
   const { wallet } = useWallet(symbol);
+  const { profile } = useProfile();
 
   const history = useHistory();
 
   const goBack = () => history.goBack();
+
+  const customWallet = profile.wallets.find(
+    (w) => w.symbol.toLowerCase() === symbol
+  );
+  const address = customWallet?.address || wallet.address;
 
   return (
     <Container p="24px 0" wide>
@@ -25,7 +32,7 @@ const Address = () => {
 
       <Container p="24px 0" flex="center" wide>
         <Container bg="bg" p="24px" radius="16px" w="auto" h="auto">
-          <QRCode value={wallet.address} />
+          <QRCode value={address} />
         </Container>
       </Container>
 
