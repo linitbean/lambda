@@ -14,6 +14,8 @@ import DashboardLayout from "../templates/Dashboard";
 import { useTransaction } from "../../hooks/useTransactions";
 
 import { capitalise } from "../../utils/formatText";
+import { getCurrentProfit } from "../../utils/transactionUtils";
+import { parseBalance } from "../../utils/parseBalance";
 
 const Transaction = () => {
   const { id } = useParams();
@@ -50,10 +52,12 @@ const Transaction = () => {
           <Entry title="Type">{capitalise(transaction.type)}</Entry>
           <Entry title="Block ID">{transaction._id}</Entry>
           <Entry title="Amount">
-            {transaction.amount.toLocaleString()} USD
+            {Math.abs(transaction.amount).toLocaleString()} USD
           </Entry>
           {transaction.type === "investment" && (
-            <Entry title="Profit">+{transaction.profit} USD</Entry>
+            <Entry title="Profit">
+              +{parseBalance(getCurrentProfit(transaction))} USD
+            </Entry>
           )}
           <Entry title="Status">Approved</Entry>
           <Entry title="Total Amount">

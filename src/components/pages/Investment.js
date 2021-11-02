@@ -55,7 +55,7 @@ const Investment = () => {
       <Container p="12px" m="12px 0" flex="center" wide>
         <Container bg="bg" p="12px" radius="8px" maxW="480px" wide>
           <Entry title="Amount">
-            {transaction.amount.toLocaleString()} USD
+            {Math.abs(transaction.amount).toLocaleString()} USD
           </Entry>
           <Entry title="Profit">
             +{parseBalance(getCurrentProfit(transaction))} USD
