@@ -22,6 +22,7 @@ import AddTransaction from "../common/add/AddTransaction";
 import AddMessage from "../common/add/AddMessage";
 import AddPayment from "../common/add/AddPayment";
 
+import EditPassword from "../common/edit/EditPassword";
 import EditMessage from "../common/edit/EditMessage";
 import EditPayment from "../common/edit/EditPayment";
 import EditTransaction from "../common/edit/EditTransaction";
@@ -80,6 +81,9 @@ const User = () => {
       </Route>
 
       {/* edit routes */}
+      <Route path={`${path}/change-password`}>
+        <EditPassword />
+      </Route>
       <Route path={`${path}/transactions/:id`}>
         <EditTransaction />
       </Route>

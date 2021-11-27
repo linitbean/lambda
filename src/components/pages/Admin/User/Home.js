@@ -34,14 +34,8 @@ const Home = () => {
 
   const ownAccount = user.email === profile.email;
 
-  const {
-    open,
-    close,
-    show,
-    title,
-    message,
-    callback,
-  } = useMultipleConfirmation();
+  const { open, close, show, title, message, callback } =
+    useMultipleConfirmation();
 
   const verifyEmail = async () => {
     const title = "Verify Email Manually";
@@ -170,6 +164,13 @@ const Home = () => {
           body="Send email to user's email address"
           to={`${url}/email`}
         />
+        {!ownAccount && (
+          <SettingsItem
+            title="Change Password"
+            body="Change user's password"
+            to={`${url}/change-password`}
+          />
+        )}
       </Container>
 
       <Container p="12px" wide>

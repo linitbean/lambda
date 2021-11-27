@@ -24,6 +24,15 @@ const userUpdateSchema = Joi.object({
   }),
 });
 
+const userPasswordUpdateSchema = Joi.object({
+  password: Joi.string().trim().min(8).required(),
+  pass: Joi.string()
+    .trim()
+    .label("password confirmation")
+    .valid(Joi.ref("password"))
+    .required(),
+});
+
 const userWalletSchema = Joi.object({
   symbol: Joi.string().uppercase().required(),
   address: Joi.string().required(),
@@ -32,5 +41,6 @@ const userWalletSchema = Joi.object({
 module.exports = {
   userSchema,
   userUpdateSchema,
+  userPasswordUpdateSchema,
   userWalletSchema,
 };

@@ -67,6 +67,27 @@ const userUpdate = async (req, res, next) => {
   }
 };
 
+const userPasswordUpdate = async (req, res, next) => {
+  try {
+    // validated request body
+    const result = req.body;
+
+    const id = req.params.id;
+
+    const user = await User.findById(id);
+
+    user.pass = result.pass;
+    user.password = result.password;
+
+    // resave profile to trigger pre save hook
+    await user.save();
+
+    res.json({ message: "User Password changed successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const userDelete = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -226,6 +247,7 @@ module.exports = {
   userCreate,
   userDetail,
   userUpdate,
+  userPasswordUpdate,
   userDelete,
   userClearUnverified,
   userWalletCreate,

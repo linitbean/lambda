@@ -15,6 +15,7 @@ const {
   userSchema,
   userUpdateSchema,
   userWalletSchema,
+  userPasswordUpdateSchema,
 } = require("../validators/user");
 
 // all users
@@ -49,6 +50,15 @@ router.put(
   matchId,
   validate(userUpdateSchema),
   UserController.userUpdate
+);
+
+// update profile
+router.post(
+  "/:id/change-password",
+  permissions(["admin"]),
+  matchId,
+  validate(userPasswordUpdateSchema),
+  UserController.userPasswordUpdate
 );
 
 // delete user
