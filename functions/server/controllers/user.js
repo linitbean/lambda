@@ -1,4 +1,5 @@
 const createError = require("http-errors");
+const Transaction = require("../models/transaction");
 
 const User = require("../models/user");
 const { destroyIdentity, destroyResidence } = require("../utils/uploader");
@@ -63,6 +64,60 @@ const userUpdate = async (req, res, next) => {
 
     res.json(updatedUser);
   } catch (err) {
+    next(err);
+  }
+};
+
+const userDemoMode = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    // update profile
+    const user = await User.findById(id);
+    if (!user) return next(createError.NotFound("User not found"));
+
+    if (user.demoMode) {
+      // user is in active demo mode and in demo period
+      user.meta.isDemo = false;
+
+      // remove demo transactions
+      await Transaction.deleteMany({
+        user: user.id,
+        demo: true,
+      });
+
+      await user.save();
+      res.json({ message: "Successfully opted out of demo account" });
+    } else {
+      // user is not in demo mode or demo period elapsed
+      if (user.inDemoPeriod) {
+        // user can enter demo mode
+        user.meta.isDemo = true;
+
+        // create demo deposit
+        const demoDeposit = Transaction.create({
+          type: "deposit",
+          wallet: "BTC",
+          amount: process.env.REACT_APP_DEMO_DEPOSIT
+            ? process.env.REACT_APP_DEMO_DEPOSIT
+            : 1000,
+          user: user.id,
+          demo: true,
+        });
+
+        await user.save();
+        res.json({
+          message: `Successfully opted in for demo account with ${demoDeposit.amount} balance`,
+        });
+      } else {
+        // demo mode elapsed
+        res.status(400).json({
+          message: "Unable to opt in for demo account, Trial period expired",
+        });
+      }
+    }
+  } catch (err) {
+    console.log(err);
     next(err);
   }
 };
@@ -247,6 +302,7 @@ module.exports = {
   userCreate,
   userDetail,
   userUpdate,
+  userDemoMode,
   userPasswordUpdate,
   userDelete,
   userClearUnverified,

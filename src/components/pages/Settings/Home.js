@@ -1,22 +1,17 @@
 import React from "react";
 import { useRouteMatch } from "react-router-dom";
-
-import Container from "../../atoms/Container";
-import Text from "../../atoms/Text";
-
-import ProfilePic from "../../molecules/ProfilePic";
-import { SettingsItem, SettingsHeading } from "../../molecules/SettingsItem";
-
-import Upgrade from "../../organisms/Upgrade";
-
 import { useProfile } from "../../../hooks/useProfile";
-
 import {
   capitalise,
   convertDate,
   formatPhoneNumber,
 } from "../../../utils/formatText";
 import { getMembership } from "../../../utils/profileUtils";
+import Container from "../../atoms/Container";
+import Text from "../../atoms/Text";
+import ProfilePic from "../../molecules/ProfilePic";
+import { SettingsHeading, SettingsItem } from "../../molecules/SettingsItem";
+import Upgrade from "../../organisms/Upgrade";
 
 const Home = () => {
   const { url } = useRouteMatch();
@@ -48,6 +43,25 @@ const Home = () => {
       </Container>
 
       <Upgrade p="12px 0" m="0 0 12px 0" />
+
+      {profile.inDemoPeriod && (
+        <Container p="12px 0" wide>
+          <SettingsHeading isNew heading="Demo Account" />
+          <SettingsItem
+            title={
+              profile.demoMode
+                ? "Switch to Trading Account"
+                : "Switch to Demo Account"
+            }
+            body={
+              profile.demoMode
+                ? "Opt out of Bittellar Demo Account"
+                : "Opt in for a Bittellar Demo Account"
+            }
+            to={"/account/demo"}
+          />
+        </Container>
+      )}
 
       <Container p="12px 0" wide>
         <SettingsHeading heading="Personal Information" />

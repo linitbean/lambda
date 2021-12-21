@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-
+import { useProfile } from "../../hooks/useProfile";
 import NavBar from "../organisms/NavBar";
 import Sidebar from "../organisms/Sidebar";
 import Userbar from "../organisms/Userbar";
@@ -71,11 +71,13 @@ const Dashboard = ({ children }) => {
 
   const { pathname } = useLocation();
 
+  const { profile } = useProfile();
+
   useEffect(() => setSidebarOpen(false), [pathname]);
 
   return (
     <Wrapper>
-      <NavBar action={toggleSidebar} />
+      <NavBar demo={profile.demoMode} action={toggleSidebar} />
       <GridWrapper>
         <Sidebar open={sidebarOpen} toggle={toggleSidebar} />
         <Content>{children}</Content>

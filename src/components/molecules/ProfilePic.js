@@ -1,11 +1,9 @@
 import React from "react";
-
 import { useProfile } from "../../hooks/useProfile";
-
 import Avatar from "../atoms/Avatar";
 import Image from "../atoms/Image";
 
-const ProfilePic = ({ size = "32px", user: customUser, ...props }) => {
+const ProfilePic = ({ size = "32px", user: customUser, demo, ...props }) => {
   const { profile } = useProfile();
 
   const user = customUser || profile;
@@ -20,7 +18,7 @@ const ProfilePic = ({ size = "32px", user: customUser, ...props }) => {
   return user.avatar?.url ? (
     <Image src={newUrl} w={size} h={size} radius="50%" alt={user.fullName} />
   ) : (
-    <Avatar size={size} name={user.fullName} {...props} />
+    <Avatar size={size} name={user.fullName} demo={demo} {...props} />
   );
 };
 

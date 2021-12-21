@@ -1,6 +1,7 @@
 const createError = require("http-errors");
 
 const Transaction = require("../models/transaction");
+const User = require("../models/user");
 
 const { withdrawalMail } = require("../utils/mailer");
 const {
@@ -22,11 +23,15 @@ const transactionList = (req, res, next) => {
   }
 };
 
-const transactionUserList = (req, res, next) => {
+const transactionUserList = async (req, res, next) => {
   try {
-    const user = req.params.userId;
+    const userId = req.params.userId;
+
+    const user = await User.findById(userId);
+    if (!user) return next(createError.NotFound("User not found"));
+
     // add query result to response
-    res.query = Transaction.find({ user })
+    res.query = Transaction.find({ user: user.id, demo: user.demoMode })
       .sort("-date")
       .populate("user", "email firstName lastName");
     next();
@@ -35,11 +40,17 @@ const transactionUserList = (req, res, next) => {
   }
 };
 
-const transactionReqUserList = (req, res, next) => {
+const transactionReqUserList = async (req, res, next) => {
   try {
-    const user = req.user.id;
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+    if (!user) return next(createError.NotFound("User not found"));
+
     // add query result to response
-    res.query = Transaction.find({ user }).sort("-date");
+    res.query = Transaction.find({ user: user.id, demo: user.demoMode }).sort(
+      "-date"
+    );
     next();
   } catch (err) {
     next(err);
@@ -89,14 +100,28 @@ const transactionCreate = async (req, res, next) => {
       if (result.type === "investment") {
         result = { ...result, profit: 0 };
       }
+
+      if (result.type === "withdrawal" && req.user.demoMode)
+        throw createError.Forbidden("Withdrawal not allowed");
+
+      if (result.type === "transfer" && req.user.demoMode)
+        throw createError.Forbidden("Transfer not allowed");
+
       const allowedTransactions = ["investment", "transfer", "withdrawal"];
       if (!allowedTransactions.includes(result.type)) {
         throw createError.Forbidden("You do not have sufficient permission");
       }
     }
 
+    const user = await User.findById(result.user);
+    if (!user) return next(createError.NotFound("User not found"));
+
     // create new transaction
-    const transaction = new Transaction(result);
+    const transaction = new Transaction({
+      ...result,
+      demo: user.toJSON().demoMode,
+    });
+
     const savedTransaction = await transaction.save();
 
     // send withdrawal mail

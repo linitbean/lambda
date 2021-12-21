@@ -1,26 +1,20 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import { FaArrowAltCircleUp } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-
-import Container from "../../../atoms/Container";
-import Text from "../../../atoms/Text";
-import Select from "../../../atoms/Select";
-import Checkbox from "../../../atoms/Checkbox";
-import Button from "../../../atoms/Button";
-import Spinner from "../../../atoms/Spinner";
-
-import { SettingsHeading, SettingsItem } from "../../../molecules/SettingsItem";
-import ProfilePic from "../../../molecules/ProfilePic";
-
-import ConfirmationModal from "../../../organisms/ConfirmationModal";
-
-import { useAdminUser } from "../../../../hooks/useUsers";
+import { FaArrowAltCircleUp } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 import { useToggle } from "../../../../hooks/useToggle";
-
-import { capitalise } from "../../../../utils/formatText";
+import { useAdminUser } from "../../../../hooks/useUsers";
 import axiosInstance from "../../../../utils/axios";
-
+import { capitalise } from "../../../../utils/formatText";
+import Button from "../../../atoms/Button";
+import Checkbox from "../../../atoms/Checkbox";
+import Container from "../../../atoms/Container";
+import Select from "../../../atoms/Select";
+import Spinner from "../../../atoms/Spinner";
+import Text from "../../../atoms/Text";
+import ProfilePic from "../../../molecules/ProfilePic";
+import { SettingsHeading, SettingsItem } from "../../../molecules/SettingsItem";
+import ConfirmationModal from "../../../organisms/ConfirmationModal";
 import { AdminDisplay } from "../common/AdminChecker";
 
 const Account = () => {
@@ -76,12 +70,64 @@ const Account = () => {
       </Container>
 
       <AdminDisplay>
+        <DemoModeControl user={user} mutate={mutate} />
         <RequestUpgrade user={user} mutate={mutate} />
         <UpgradeForm user={user} mutate={mutate} />
       </AdminDisplay>
     </Container>
   );
 };
+
+function DemoModeControl({ user, mutate }) {
+  const { show, toggle } = useToggle();
+
+  const changeStatus = async () => {
+    if (!user.inDemoPeriod) return;
+    try {
+      await axiosInstance.post("/users/" + user._id + "/demo");
+      mutate();
+    } catch (err) {
+      // console.log("Err:", err.response);
+    }
+  };
+
+  return (
+    <Container p="12px" wide>
+      <SettingsHeading heading="Demo Account Options" />
+      <SettingsItem
+        title={user.demoMode ? "Demo Account" : "Trading Account"}
+        body={
+          user.demoMode
+            ? "Change account to regular trading account"
+            : user.inDemoPeriod
+            ? "Change account to demo account"
+            : "Demo Period elapsed"
+        }
+        color={user.meta.requireUpgrade ? "actionBg" : undefined}
+        opacity="1"
+        disabled
+        icon={<FaArrowAltCircleUp />}
+        onClick={toggle}
+      />
+
+      <ConfirmationModal
+        open={show}
+        title={
+          user.demoMode ? "Change to Trading Account" : "Change to Demo Account"
+        }
+        message={
+          user.demoMode
+            ? "Change account to regular trading account"
+            : user.inDemoPeriod
+            ? "Change account to demo account"
+            : "Demo Period elapsed, This user can no longer opt in for a demo account"
+        }
+        action={changeStatus}
+        dismiss={toggle}
+      />
+    </Container>
+  );
+}
 
 function RequestUpgrade({ user, mutate }) {
   const { show, toggle } = useToggle();

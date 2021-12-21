@@ -37,6 +37,9 @@ router.get("/", ProfileController.profileUser);
 // update profile
 router.put("/", validate(profileUpdateSchema), ProfileController.profileUpdate);
 
+// opt in/out of demo account
+router.post("/demo", ProfileController.profileDemoMode);
+
 // update profile
 router.post(
   "/change-password",

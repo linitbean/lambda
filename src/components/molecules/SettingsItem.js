@@ -1,10 +1,9 @@
 import React from "react";
-import styled from "styled-components";
 import { FaChevronRight } from "react-icons/fa";
-
+import styled from "styled-components";
 import Container from "../atoms/Container";
-import Text from "../atoms/Text";
 import SubText from "../atoms/SubText";
+import Text from "../atoms/Text";
 
 const Wrapper = styled(Container)`
   :last-child {
@@ -52,8 +51,23 @@ export const SettingsItem = ({
   </Wrapper>
 );
 
-export const SettingsHeading = ({ heading }) => (
+const NewBadge = () => {
+  return (
+    <SubText
+      m="0 0 0 4px"
+      p="2px 8px"
+      bg="primary"
+      color="white"
+      bold
+      radius="12px"
+    >
+      New
+    </SubText>
+  );
+};
+
+export const SettingsHeading = ({ heading, isNew }) => (
   <Text bg="bg" p="8px 16px" m="0 0 12px 0" font="12px" radius="8px">
-    {heading}
+    {heading} {isNew && <NewBadge />}
   </Text>
 );
