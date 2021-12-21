@@ -1,24 +1,35 @@
 import React from "react";
-import { Switch, Route, Redirect, useRouteMatch } from "react-router-dom";
-
+import {
+  Redirect,
+  Route,
+  Switch,
+  useLocation,
+  useRouteMatch,
+} from "react-router-dom";
 import PreLoader from "../components/atoms/PreLoader";
-
-import Login from "../components/pages/authentication/Login";
-import Register from "../components/pages/authentication/Register";
-import Referral from "../components/pages/authentication/Referral";
+import DemoAccount from "../components/pages/authentication/DemoAccount";
 import ForgotPassword from "../components/pages/authentication/ForgotPassword";
+import Login from "../components/pages/authentication/Login";
+import Referral from "../components/pages/authentication/Referral";
+import Register from "../components/pages/authentication/Register";
 import ResetPassword from "../components/pages/authentication/ResetPassword";
-
 import { useProfile } from "../hooks/useProfile";
 
 const AuthChecker = ({ children }) => {
+  const location = useLocation();
   const { profile, loading } = useProfile();
 
   if (loading) return <PreLoader />;
 
-  if (profile) return <Redirect to="/dashboard" />;
+  const whitelist = ["/account/demo"];
+  const path = location.pathname.split("/").slice(0, 3).join("/");
+  const whitelisted = whitelist.includes(path);
 
-  if (!profile) return children;
+  console.log();
+
+  if (profile && !whitelisted) return <Redirect to="/dashboard" />;
+
+  return children;
 };
 
 export default function AuthRoute() {
@@ -41,6 +52,9 @@ export default function AuthRoute() {
         </Route>
         <Route exact path={`${path}/reset-password/:token`}>
           <ResetPassword />
+        </Route>
+        <Route exact path={`${path}/demo`}>
+          <DemoAccount />
         </Route>
 
         <Route>

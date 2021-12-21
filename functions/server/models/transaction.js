@@ -32,6 +32,10 @@ const TransactionSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  demo: {
+    type: Boolean,
+    default: false,
+  },
   // investment meta
   profit: {
     type: Number,

@@ -116,6 +116,10 @@ const UserSchema = new Schema(
         type: Boolean,
         default: false,
       },
+      isDemo: {
+        type: Boolean,
+        default: false,
+      },
     },
     referrer: {
       type: Schema.Types.ObjectId,
@@ -153,6 +157,23 @@ const UserSchema = new Schema(
 
 UserSchema.virtual("fullName").get(function () {
   return this.firstName + " " + this.lastName;
+});
+
+const demoPreiodElapsed = (date) => {
+  const created = new Date(date).getTime();
+  const today = new Date().getTime();
+
+  const diffInDays = Math.floor((today - created) / (24 * 60 * 60 * 1000));
+
+  return diffInDays > 30;
+};
+
+UserSchema.virtual("inDemoPeriod").get(function () {
+  return !demoPreiodElapsed(this.createdAt);
+});
+
+UserSchema.virtual("demoMode").get(function () {
+  return demoPreiodElapsed(this.createdAt) ? false : this.meta.isDemo;
 });
 
 // capitalise name after save

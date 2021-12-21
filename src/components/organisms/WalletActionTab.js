@@ -1,30 +1,25 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-import Container from "../atoms/Container";
-import Text from "../atoms/Text";
-import SubText from "../atoms/SubText";
-import Input from "../atoms/Input";
-import Select from "../atoms/Select";
-import Button from "../atoms/Button";
-import Spinner from "../atoms/Spinner";
-
-import Tabs from "../molecules/Tabs";
-
-import ConfirmationModal from "../organisms/ConfirmationModal";
-import ProcessModal from "../organisms/ProcessModal";
-
-import { useProfile } from "../../hooks/useProfile";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
+import * as yup from "yup";
 import { useWalletBalance } from "../../hooks/useBalance";
-import { useToggle } from "../../hooks/useToggle";
 import { useProcess } from "../../hooks/useProcess";
+import { useProfile } from "../../hooks/useProfile";
+import { useToggle } from "../../hooks/useToggle";
 import { useTransactions } from "../../hooks/useTransactions";
-
 import axiosInstance from "../../utils/axios";
 import { rawBalance } from "../../utils/parseBalance";
+import Button from "../atoms/Button";
+import Container from "../atoms/Container";
+import Input from "../atoms/Input";
+import Select from "../atoms/Select";
+import Spinner from "../atoms/Spinner";
+import SubText from "../atoms/SubText";
+import Text from "../atoms/Text";
+import Tabs from "../molecules/Tabs";
+import ConfirmationModal from "../organisms/ConfirmationModal";
+import ProcessModal from "../organisms/ProcessModal";
 
 const WalletActionTab = (props) => {
   const { profile } = useProfile();
@@ -66,7 +61,7 @@ const WalletActionTab = (props) => {
         {...props}
       >
         <Container name="Invest" p="12px" wide>
-          <Invest action={makeTransaction} />
+          <Invest demo={profile.demoMode} action={makeTransaction} />
         </Container>
         <Container name="Transfer" p="12px" wide>
           <Transfer action={makeTransaction} />
@@ -84,7 +79,7 @@ const WalletActionTab = (props) => {
   );
 };
 
-function Invest({ action }) {
+function Invest({ action, demo }) {
   const { symbol } = useParams();
   const { available } = useWalletBalance(symbol);
 
@@ -118,7 +113,7 @@ function Invest({ action }) {
   } = useForm({
     defaultValues: {
       amount: null,
-      duration: 7,
+      duration: demo ? 1 : 7,
     },
     resolver: yupResolver(schema),
   });
@@ -141,7 +136,7 @@ function Invest({ action }) {
     });
     reset({
       amount: null,
-      duration: 7,
+      duration: demo ? 1 : 7,
     });
   };
 
@@ -189,21 +184,32 @@ function Invest({ action }) {
         })}
         name="duration"
       >
-        <option value="7">7 Days</option>
-        <option value="14">14 Days</option>
-        <option value="21">21 Days</option>
-        <option value="30">1 Month</option>
-        <option value="60">2 Months</option>
-        <option value="90">3 Months</option>
+        {demo ? (
+          <>
+            <option value="1">24 Hours</option>
+            <option value="2">48 Hours</option>
+            <option value="3">72 Hours</option>
+          </>
+        ) : (
+          <>
+            <option value="7">7 Days</option>
+            <option value="14">14 Days</option>
+            <option value="21">21 Days</option>
+            <option value="30">1 Month</option>
+            <option value="60">2 Months</option>
+            <option value="90">3 Months</option>
+          </>
+        )}
       </Select>
 
       <Button
         type="submit"
-        bg="primary"
-        color="invertText"
+        bg="white"
+        color="black"
         bold
         full
         m="24px 0 0"
+        p="14px"
         radius="8px"
         disabled={isSubmitting}
       >
@@ -351,11 +357,12 @@ function Transfer({ action }) {
 
       <Button
         type="submit"
-        bg="primary"
-        color="invertText"
+        bg="white"
+        color="black"
         bold
         full
         m="24px 0 0"
+        p="14px"
         radius="8px"
         disabled={isSubmitting}
       >

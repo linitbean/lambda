@@ -21,6 +21,7 @@ const userUpdateSchema = Joi.object({
     isActive: Joi.boolean(),
     isRestricted: Joi.boolean(),
     isEmailVerified: Joi.boolean(),
+    isDemo: Joi.boolean(),
   }),
 });
 

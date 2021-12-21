@@ -30,7 +30,7 @@ const verifyAccessToken = async (req, res, next) => {
       }).select("email firstName lastName meta role");
 
       if (!user) throw createError.Unauthorized();
-      req.user = user;
+      req.user = user.toJSON();
 
       next();
     } catch (err) {

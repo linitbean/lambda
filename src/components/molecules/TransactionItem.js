@@ -1,16 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-
-import Container from "../atoms/Container";
-import TransactionIcon from "../atoms/TransactionIcon";
-import Text from "../atoms/Text";
-import SubText from "../atoms/SubText";
-
 import { useCoinValue } from "../../hooks/useCoinValue";
-
 import { capitalise } from "../../utils/formatText";
-import { getCurrentProfit } from "../../utils/transactionUtils";
 import { parseBalance } from "../../utils/parseBalance";
+import { getCurrentProfit } from "../../utils/transactionUtils";
+import Container from "../atoms/Container";
+import SubText from "../atoms/SubText";
+import Text from "../atoms/Text";
+import TransactionIcon from "../atoms/TransactionIcon";
 
 const Wrapper = styled(Container)`
   :last-child {
@@ -111,7 +108,8 @@ export const AdminTransactionItem = ({
               ? transaction.user?.fullName
               : `${transaction.wallet.toUpperCase()} ${capitalise(
                   transaction.type
-                )}`}
+                )}`}{" "}
+            {transaction.demo && "(Demo)"}
           </Text>
           <Text font="10px" p="0" opacity="0.8">
             {new Date(transaction.date).toDateString()}

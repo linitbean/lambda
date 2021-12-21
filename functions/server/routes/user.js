@@ -52,7 +52,15 @@ router.put(
   UserController.userUpdate
 );
 
-// update profile
+// opt user in/out of demo account
+router.post(
+  "/:id/demo",
+  permissions(["admin"]),
+  matchId,
+  UserController.userDemoMode
+);
+
+// update password
 router.post(
   "/:id/change-password",
   permissions(["admin"]),

@@ -1,10 +1,9 @@
 import React from "react";
+import { FaBars } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { FaBars } from "react-icons/fa";
-
 import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
-
+import SubText from "../atoms/SubText";
 import ProfilePic from "../molecules/ProfilePic";
 
 const Wrapper = styled.aside`
@@ -21,8 +20,10 @@ const Wrapper = styled.aside`
 
   z-index: 2;
 
-  background-color: ${({ bg, theme }) =>
-    theme.colors[bg] || bg || theme.colors.bgContrast};
+  background-color: ${({ bg, theme, demo }) =>
+    demo
+      ? theme.colors.primary
+      : theme.colors[bg] || bg || theme.colors.bgContrast};
 
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
@@ -41,6 +42,7 @@ const Menu = styled(FaBars)`
   font-size: 24px;
   width: 24px;
   display: none;
+  color: ${({ demo, theme }) => (demo ? "white" : theme.colors.text)};
 
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     display: block;
@@ -54,6 +56,7 @@ const Heading = styled.h3`
   font-size: 16px;
   font-weight: 600;
   text-align: center;
+  color: ${({ demo, theme }) => (demo ? "white" : theme.colors.text)};
 
   display: flex;
   align-items: center;
@@ -66,17 +69,29 @@ const Heading = styled.h3`
   }
 `;
 
-const NavBar = ({ action }) => {
+const NavBar = ({ action, demo }) => {
   return (
-    <Wrapper>
-      <Menu onClick={action} />
+    <Wrapper demo={demo}>
+      <Menu onClick={action} demo={demo} />
       <Link to="/dashboard">
-        <Heading>
+        <Heading demo={demo}>
           <Logo />
           {process.env.REACT_APP_NAME}
+          {demo && (
+            <SubText
+              m="0 0 0 8px"
+              p="2px 8px"
+              bg="white"
+              color="primary"
+              bold
+              radius="12px"
+            >
+              Demo
+            </SubText>
+          )}
         </Heading>
       </Link>
-      <ProfilePic />
+      <ProfilePic demo={demo} />
     </Wrapper>
   );
 };
