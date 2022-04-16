@@ -72,7 +72,7 @@ const Heading = styled.h3`
 const NavBar = ({ action, demo }) => {
   return (
     <Wrapper demo={demo}>
-      <Menu onClick={action} demo={demo} />
+      <Menu onClick={action} demo={demo ? demo : undefined} />
       <Link to="/dashboard">
         <Heading demo={demo}>
           <Logo />

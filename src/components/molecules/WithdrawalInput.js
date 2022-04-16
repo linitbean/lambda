@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { FaCreditCard } from "react-icons/fa";
 
 import Container from "../atoms/Container";
