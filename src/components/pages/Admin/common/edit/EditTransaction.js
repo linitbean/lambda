@@ -214,7 +214,7 @@ const EditTransaction = () => {
   };
 
   
-  const [approveRequest, setApproveRequest] = useState({message:"null", error:null, loading: false})
+  const [approveRequest, setApproveRequest] = useState({message: null, error:null, loading: false})
 
   const sendApproveMail = async () => {
     try {
