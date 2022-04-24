@@ -90,14 +90,19 @@ const depositMail = async (user, transaction) => {
 };
 
 const customMailer = async ({ from, email, title, body }) => {
-  const resp = await mailer({
+  // replacers
+  body = body.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+
+  // spacing
+  body = body.split("\n\n").map(part => part.split("\n").join("<br/>"))
+
+  return await mailer({
     from: `${app_name} <${from}@${process.env.REACT_APP_DOMAIN}>`,
     to: email,
     subject: title,
     template: "custom",
     context: { title, body },
   });
-  return resp;
 };
 
 const inboundMailer = async ({ from, subject, text, html }) => {

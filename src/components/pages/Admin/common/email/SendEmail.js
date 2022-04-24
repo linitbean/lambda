@@ -1,11 +1,9 @@
-import React, { useState } from "react";
-import { FaPlus } from "react-icons/fa";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import Container from "../../../../atoms/Container";
 import Text from "../../../../atoms/Text";
-import SubText from "../../../../atoms/SubText";
 import Input from "../../../../atoms/Input";
 import Select from "../../../../atoms/Select";
 import Textarea from "../../../../atoms/Textarea";
@@ -24,8 +22,6 @@ import axiosInstance from "../../../../../utils/axios";
 import { AdminOnly } from "../AdminChecker";
 
 const SendEmail = () => {
-  const [paragraphs, setParagraphs] = useState(["", ""]);
-
   const {
     show: showEmailModal,
     open: openEmailModal,
@@ -40,7 +36,7 @@ const SendEmail = () => {
     start,
     complete,
     fail,
-    close: closeProcess,
+    close
   } = useProcess();
 
   const defaultValues = {
@@ -48,6 +44,7 @@ const SendEmail = () => {
     customFrom: "",
     email: "",
     title: "",
+    body: ""
   };
 
   const {
@@ -66,30 +63,12 @@ const SendEmail = () => {
   const { isSubmitting } = formState;
   const { from } = watch();
 
-  const newParagraph = () => {
-    setParagraphs([...paragraphs, ""]);
-  };
-
-  const close = () => {
-    closeProcess();
-    setParagraphs(["", ""]);
-  };
-
-  const handleParagraph = (e, i) => {
-    const newParagraphs = paragraphs.map((p, idx) => {
-      if (idx === i) return e.target.value;
-      return p;
-    });
-    setParagraphs(newParagraphs);
-  };
-
   const DOMAIN = process.env.REACT_APP_DOMAIN;
 
   const sendMail = async () => {
-    const { customFrom, ...formData } = getValues();
+    const { customFrom, ...data } = getValues();
 
-    let data = { ...formData, body: paragraphs };
-    if (customFrom) data = { ...formData, body: paragraphs, from: customFrom };
+    if (customFrom) data.from = customFrom
 
     try {
       start();
@@ -177,25 +156,14 @@ const SendEmail = () => {
           error={errors.title?.message}
         />
 
-        {paragraphs.map((_, i) => (
-          <Textarea
-            key={i}
-            label={i === 0 ? "Body" : null}
-            placeholder={i === 0 ? "Enter Greeting" : "New Paragraph"}
-            value={paragraphs[i]}
-            rows={i === 0 ? "2" : "6"}
-            radius="8px"
-            name="body"
-            onChange={(e) => handleParagraph(e, i)}
-          />
-        ))}
-
-        <Text font="12px" flexalign justify="center" onClick={newParagraph}>
-          Add New Paragraph{" "}
-          <SubText font="inherit" p="0" m="0 0 0 12px" flexalign>
-            <FaPlus />
-          </SubText>
-        </Text>
+        <Textarea
+          label="Body"
+          placeholder="Email body"
+          radius="8px"
+          ref={register}
+          name="body"
+          rows="12"
+        />
 
         {errors.server?.message && (
           <Text font="12px" color="danger" align="center" bold>

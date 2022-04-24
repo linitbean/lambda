@@ -16,4 +16,5 @@ export const userEmailSchema = yup.object().shape({
   from: yup.string(),
   customFrom: yup.string().matches(/^[a-zA-Z]+$/, "Invalid sender"),
   title: yup.string().required("Title is required"),
+  body: yup.string().required("Body is required"),
 });
