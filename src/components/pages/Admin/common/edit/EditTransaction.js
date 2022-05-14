@@ -17,6 +17,7 @@ import Spinner from "../../../../atoms/Spinner";
 import Entry from "../../../../molecules/Entry";
 import ControlledDateInput from "../../../../molecules/ControlledDateInput";
 import ControlledWalletInput from "../../../../molecules/ControlledWalletInput";
+import ControlledWithdrawalInput from "../../../../molecules/ControlledWithdrawalInput";
 import { CreditCardItem } from "../../../../molecules/CreditCard";
 import { BankItem } from "../../../../molecules/Bank";
 
@@ -31,6 +32,7 @@ import {
   useAdminTransactions,
   useAdminUserTransactions,
 } from "../../../../../hooks/useTransactions";
+import { useAdminUser } from "../../../../../hooks/useUsers";
 
 import axiosInstance from "../../../../../utils/axios";
 import { capitalise, ccNumber, replaceSnake } from "../../../../../utils/formatText";
@@ -50,26 +52,26 @@ const MethodBrand = styled(FaWallet)`
   border-radius: 4px;
 `;
 
-const Method = ({title, desc, action}) => (
+const Method = ({ title, desc, action }) => (
   <Container
-      p="12px"
-      m="12px 0"
-      border="1px solid"
-      radius="12px"
-      flex="space-between"
-      wide="true"
-      onClick={() => (action ? action() : undefined)}
-    >
-      <Container flexCol="flex-start" wide>
-        <Text font="13px" p="0" m="0 0 4px 0" bold>
-          {title}
-        </Text>
-        <Text font="10px" p="0" opacity="0.6">
-          {desc}
-        </Text>
-      </Container>
+    p="12px"
+    m="12px 0"
+    border="1px solid"
+    radius="12px"
+    flex="space-between"
+    wide="true"
+    onClick={() => (action ? action() : undefined)}
+  >
+    <Container flexCol="flex-start" wide>
+      <Text font="13px" p="0" m="0 0 4px 0" bold>
+        {title}
+      </Text>
+      <Text font="10px" p="0" opacity="0.6">
+        {desc}
+      </Text>
+    </Container>
 
-      <MethodBrand size="26px" />
+    <MethodBrand size="26px" />
   </Container>
 )
 
@@ -135,13 +137,13 @@ const Withdrawal = ({ withdrawal }) => {
             title={withdrawal.method.address.value}
             desc={withdrawal.method.address.wallet}
             action={toggle}
-            />
-            {show && (
-              <Container bg="bg" p="12px" radius="12px" wide>
-                <Text align="center" bold>{withdrawal.method.address.value}</Text>
-                <Entry title="Wallet">{withdrawal.method.address.wallet}</Entry>
-              </Container>
-            )}
+          />
+          {show && (
+            <Container bg="bg" p="12px" radius="12px" wide>
+              <Text align="center" bold>{withdrawal.method.address.value}</Text>
+              <Entry title="Wallet">{withdrawal.method.address.wallet}</Entry>
+            </Container>
+          )}
         </>
       ) : null}
     </Container>
@@ -152,6 +154,8 @@ const EditTransaction = () => {
   const history = useHistory();
   const { id, userId } = useParams();
   const { show, toggle } = useToggle();
+
+  const { user } = useAdminUser(userId);
 
   const { wallets, loading: loadingWallets } = useWallets();
   const {
@@ -213,12 +217,12 @@ const EditTransaction = () => {
     }
   };
 
-  
-  const [approveRequest, setApproveRequest] = useState({message: null, error:null, loading: false})
+
+  const [approveRequest, setApproveRequest] = useState({ message: null, error: null, loading: false })
 
   const sendApproveMail = async () => {
     try {
-      setApproveRequest(r => ({...r, loading: true}))
+      setApproveRequest(r => ({ ...r, loading: true }))
       const { data } = await axiosInstance.post(
         "/transactions/" + transaction?._id + "/approve-mail"
       );
@@ -296,7 +300,7 @@ const EditTransaction = () => {
                 bold
                 full
                 onClick={sendApproveMail}
-                >
+              >
                 {approveRequest.loading ? (
                   <Spinner />
                 ) : (
@@ -309,9 +313,8 @@ const EditTransaction = () => {
         </>
       )}
 
-      <Container as="form" onSubmit={handleSubmit(onSubmit)} p="12px" wide>
+      <Container as="form" onSubmit={handleSubmit(onSubmit, (e) => console.log(e))} p="12px" wide>
         <input hidden ref={register} name="type" />
-        <input hidden ref={register} name="method" />
         {type === "income" && (
           <Input
             label="Description"
@@ -323,16 +326,29 @@ const EditTransaction = () => {
           />
         )}
         {type === "withdrawal" && (
-          <Select
-            radius="8px"
-            label="Status"
-            ref={register}
-            name="status"
-            error={errors.status?.message}
-          >
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-          </Select>
+          <>
+            <Select
+              radius="8px"
+              label="Status"
+              ref={register}
+              name="status"
+              error={errors.status?.message}
+            >
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+            </Select>
+            <ControlledWithdrawalInput
+              radius="8px"
+              label="Withdrawal Method"
+              placeholder="Withdrawal Method"
+              cards={user.cards}
+              banks={user.banks}
+              noadd
+              control={control}
+              name="method"
+              error={errors.method?.message}
+            />
+          </>
         )}
         <ControlledWalletInput
           label="Wallet"
