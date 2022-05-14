@@ -160,7 +160,7 @@ const AddTransaction = () => {
         </Container>
       </Container>
 
-      <Container as="form" p="12px" wide onSubmit={handleSubmit(onSubmit)}>
+      <Container as="form" p="12px" wide onSubmit={handleSubmit(onSubmit, (e) => console.log(e))}>
         <Select
           radius="8px"
           label="Type"
