@@ -12,6 +12,7 @@ const TransactionSchema = new Schema({
       "withdrawal",
       "transfer",
       "income",
+      "fee",
       "referral",
     ],
   },
@@ -118,6 +119,11 @@ TransactionSchema.pre("save", function (next) {
       }
       break;
     case "withdrawal":
+      if (Math.sign(this.amount) !== -1) {
+        this.amount = this.amount * -1;
+      }
+      break;
+    case "fee":
       if (Math.sign(this.amount) !== -1) {
         this.amount = this.amount * -1;
       }

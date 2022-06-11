@@ -9,7 +9,7 @@ export const transactionSchema = yup.object().shape({
     .required("Type is required")
     .lowercase()
     .oneOf(
-      ["investment", "deposit", "withdrawal", "transfer", "income"],
+      ["investment", "deposit", "withdrawal", "transfer", "income", "fee"],
       "Invalid transaction type"
     ),
 
@@ -22,7 +22,7 @@ export const transactionSchema = yup.object().shape({
     .positive(),
 
   description: yup.string().when("type", {
-    is: "income",
+    is: (val) => ["income", "fee"].includes(val),
     then: yup.string().required("Please provide a description for income"),
   }),
 

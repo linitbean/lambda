@@ -73,7 +73,7 @@ const AddTransaction = () => {
   const balance = rawBalance(available);
 
   const onSubmit = async (data) => {
-    const expenses = ["investment", "transfer", "withdrawal"];
+    const expenses = ["investment", "transfer", "withdrawal", "fee"];
     if (expenses.includes(data.type) && data.amount > balance) {
       setError("amount", {
         type: "server",
@@ -173,9 +173,10 @@ const AddTransaction = () => {
           <option value="withdrawal">Withdrawal</option>
           <option value="transfer">Transfer</option>
           <option value="income">Income</option>
+          <option value="fee">Fee</option>
         </Select>
 
-        {type === "income" && (
+        {["income", "fee"].includes(type) && (
           <Input
             label="Description"
             placeholder="Description"

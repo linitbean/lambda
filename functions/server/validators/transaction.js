@@ -4,11 +4,11 @@ const transactionSchema = Joi.object({
   type: Joi.string()
     .lowercase()
     .required()
-    .valid("investment", "deposit", "withdrawal", "transfer", "income"),
+    .valid("investment", "deposit", "withdrawal", "transfer", "income", "fee"),
   wallet: Joi.string().uppercase().required(),
   amount: Joi.number().required(),
   description: Joi.when("type", {
-    is: "income",
+    is: Joi.string().valid("income", "fee"),
     then: Joi.string().required(),
     otherwise: Joi.string(),
   }),

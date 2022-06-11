@@ -22,7 +22,7 @@ const Wrapper = styled.div`
   background-color: ${({ theme, type }) =>
     ["deposit", "investment"].includes(type)
       ? theme.colors.success
-      : ["withdrawal", "transfer"].includes(type)
+      : ["withdrawal", "transfer", "fee"].includes(type)
       ? theme.colors.danger
       : theme.colors.actionBg};
   color: white;
@@ -36,6 +36,9 @@ const TransactionIcon = ({ type, ...props }) => {
       break;
     case "income":
       icon = <FaArrowDown />;
+      break;
+    case "fee":
+      icon = <FaArrowUp />;
       break;
     case "transfer":
       icon = <FaPaperPlane />;
