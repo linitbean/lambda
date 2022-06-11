@@ -230,6 +230,7 @@ const Home = () => {
           body={formatPhoneNumber(user.profile?.phone)}
         />
         <SettingsItem title="Country" body={user.profile?.country} />
+        <SettingsItem title="Zip Code" body={user.profile?.zipCode} />
         <SettingsItem title="City" body={user.profile?.city} />
         <SettingsItem
           title="Date of Birth"

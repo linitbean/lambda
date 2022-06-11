@@ -23,6 +23,7 @@ const userUpdateSchema = Joi.object({
     isEmailVerified: Joi.boolean(),
     isDemo: Joi.boolean(),
   }),
+  isDocumentVerified: Joi.boolean(),
 });
 
 const userPasswordUpdateSchema = Joi.object({
@@ -39,9 +40,15 @@ const userWalletSchema = Joi.object({
   address: Joi.string().required(),
 });
 
+const userDocumentRequestSchema = Joi.object({
+  documentName: Joi.string().required(),
+  description: Joi.string(),
+});
+
 module.exports = {
   userSchema,
   userUpdateSchema,
   userPasswordUpdateSchema,
   userWalletSchema,
+  userDocumentRequestSchema,
 };

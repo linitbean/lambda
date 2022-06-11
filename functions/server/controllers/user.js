@@ -2,7 +2,6 @@ const createError = require("http-errors");
 const Transaction = require("../models/transaction");
 
 const User = require("../models/user");
-const { destroyIdentity, destroyResidence } = require("../utils/uploader");
 
 const userList = (req, res, next) => {
   try {
@@ -297,6 +296,95 @@ const userBankDelete = async (req, res, next) => {
   }
 };
 
+const userRequestDocument = async (req, res, next) => {
+  try {
+    const { documentName, description } = req.body;
+    const userId = req.params.id;
+
+    const user = await User.findById(userId);
+    if (!user) return next(createError.NotFound("User not found"));
+
+    user.isDocumentRequested = true;
+    user.requestedDocument = documentName;
+    user.requestedDocumentDescription = description;
+    await user.save();
+
+    res.json({ message: "Document requested successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const userRequestDocumentCancel = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+
+    const user = await User.findById(userId);
+    if (!user) return next(createError.NotFound("User not found"));
+
+    user.isDocumentRequested = false;
+    user.requestedDocument = null;
+    user.requestedDocumentDescription = null;
+    await user.save();
+
+    res.json({ message: "Request cancelled successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const userDeleteDocument = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const cloudId = req.params.cloudId;
+
+    const user = await User.findById(userId);
+    if (!user) return next(createError.NotFound("User not found"));
+
+    // check if user documents
+    const deletedDocument = user.documents.find(
+      (doc) => doc.cloudId === cloudId
+    );
+    if (deletedDocument) {
+      const updatedDocuments = user.documents.filter(
+        (doc) => doc.cloudId !== cloudId
+      );
+      user.documents = updatedDocuments;
+    }
+
+    // check if user id front
+    const deletedIdFront = user.idFront.cloudId === cloudId;
+    if (deletedIdFront) {
+      user.idFront = null;
+    }
+    // check if user id back
+    const deletedIdBack = user.idBack.cloudId === cloudId;
+    if (deletedIdBack) {
+      user.idBack = null;
+    }
+    // check if user document selfie
+    const deletedDocumentSelfie = user.documentSelfie.cloudId === cloudId;
+    if (deletedDocumentSelfie) {
+      user.documentSelfie = null;
+    }
+
+    if (
+      !deletedDocument &&
+      !deletedIdFront &&
+      !deletedIdBack &&
+      !deletedDocumentSelfie
+    )
+      return next(createError.NotFound("User Document not found"));
+
+    await destroy(cloudId);
+    await user.save();
+
+    res.json({ message: "Document deleted successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   userList,
   userCreate,
@@ -312,4 +400,6 @@ module.exports = {
   userWalletDelete,
   userCardDelete,
   userBankDelete,
+  userRequestDocument,
+  userRequestDocumentCancel,
 };

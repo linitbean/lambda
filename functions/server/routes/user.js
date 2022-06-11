@@ -16,6 +16,7 @@ const {
   userUpdateSchema,
   userWalletSchema,
   userPasswordUpdateSchema,
+  userDocumentRequestSchema,
 } = require("../validators/user");
 
 // all users
@@ -125,6 +126,21 @@ router.delete(
   "/:id/banks/:bankId",
   permissions(["admin"]),
   UserController.userBankDelete
+);
+
+// request user document
+router.post(
+  "/:id/request-document",
+  permissions(["admin"]),
+  validate(userDocumentRequestSchema),
+  UserController.userRequestDocument
+);
+
+// cancel user document request
+router.delete(
+  "/:id/request-document",
+  permissions(["admin"]),
+  UserController.userRequestDocumentCancel
 );
 
 module.exports = router;

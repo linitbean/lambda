@@ -1,7 +1,7 @@
 import React from "react";
-import { useForm } from "react-hook-form";
-import { FaArrowAltCircleUp } from "react-icons/fa";
 import { useParams } from "react-router-dom";
+import { FaArrowAltCircleUp, FaMailBulk } from "react-icons/fa";
+import { useForm } from "react-hook-form";
 import { useToggle } from "../../../../hooks/useToggle";
 import { useAdminUser } from "../../../../hooks/useUsers";
 import axiosInstance from "../../../../utils/axios";
@@ -71,6 +71,7 @@ const Account = () => {
 
       <AdminDisplay>
         <DemoModeControl user={user} mutate={mutate} />
+        <RequestDocuments user={user} mutate={mutate} />
         <RequestUpgrade user={user} mutate={mutate} />
         <UpgradeForm user={user} mutate={mutate} />
       </AdminDisplay>
@@ -109,7 +110,6 @@ function DemoModeControl({ user, mutate }) {
         icon={<FaArrowAltCircleUp />}
         onClick={toggle}
       />
-
       <ConfirmationModal
         open={show}
         title={
@@ -123,6 +123,64 @@ function DemoModeControl({ user, mutate }) {
             : "Demo Period elapsed, This user can no longer opt in for a demo account"
         }
         action={changeStatus}
+        dismiss={toggle}
+      />
+    </Container>
+  )
+}
+function RequestDocuments({ user, mutate }) {
+  const { show, toggle } = useToggle();
+
+  const changeDocumentVerifiedStatus = async () => {
+    try {
+      await axiosInstance.put("/users/" + user._id, {
+        isDocumentVerified: !user.isDocumentVerified,
+      });
+      mutate();
+    } catch (err) {
+      // console.log(err.response);
+    }
+  };
+
+  return (
+    <Container p="12px" wide>
+      <SettingsHeading heading="Document Upload" />
+      <SettingsItem
+        title={
+          user.isDocumentVerified
+            ? "Request ID Document Upload"
+            : "Cancel ID Document Request"
+        }
+        body="Request this user to upload his ID documents"
+        color={user.isDocumentVerified ? undefined : "actionBg"}
+        opacity="1"
+        icon={<FaMailBulk />}
+        onClick={toggle}
+      />
+      <SettingsItem
+        title="Request Document Upload"
+        body="Request this user to upload a document"
+        to={"./document-request"}
+      />
+      <SettingsItem
+        title="View Uploaded Documents"
+        body="View all documents uploaded by this user"
+        to={"./documents"}
+      />
+
+      <ConfirmationModal
+        open={show}
+        title={
+          user.isDocumentVerified
+            ? "Request Document Upload"
+            : "Cancel Document Request"
+        }
+        message={
+          user.isDocumentVerified
+            ? "User would be required to upload his documents"
+            : "User would no longer be required to upload his documents"
+        }
+        action={changeDocumentVerifiedStatus}
         dismiss={toggle}
       />
     </Container>
@@ -147,7 +205,7 @@ function RequestUpgrade({ user, mutate }) {
   };
 
   return (
-    <Container p="12px" wide>
+    <Container p="12px" display="none" wide>
       <SettingsHeading heading="Account Upgrade" />
       <SettingsItem
         title={
@@ -252,8 +310,10 @@ function UpgradeForm({ user, mutate }) {
       <Button
         type="submit"
         m="24px 0 0"
-        radius="4px"
-        bg="primary"
+        bg="white"
+        color="black"
+        p="14px"
+        radius="8px"
         bold
         full
         disabled={isSubmitting || !isDirty}

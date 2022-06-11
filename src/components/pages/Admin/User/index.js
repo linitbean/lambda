@@ -30,6 +30,9 @@ import EditUserWallet from "../common/edit/EditUserWallet";
 
 import SendUserEmail from "../common/email/SendUserEmail";
 
+import Documents from "./Documents";
+import DocumentRequest from "./DocumentRequest";
+
 import { useAdminUser } from "../../../../hooks/useUsers";
 
 const User = () => {
@@ -102,6 +105,14 @@ const User = () => {
       {/* email route */}
       <Route path={`${path}/email`}>
         <SendUserEmail />
+      </Route>
+
+      {/* document route */}
+      <Route path={`${path}/documents`}>
+        <Documents />
+      </Route>
+      <Route path={`${path}/document-request`}>
+        <DocumentRequest />
       </Route>
 
       <Route>

@@ -278,7 +278,7 @@ const profilePhotoReset = async (req, res, next) => {
     const user = await User.findById(userId);
     if (!user) return next(createError.NotFound("User not found"));
 
-    // cloudinary avatar destroy
+    // cloudinary destroy
     await destroyProfilePhoto(user);
 
     res.json({
@@ -299,12 +299,102 @@ const profilePhotoUpload = async (req, res, next) => {
     const user = await User.findById(userId);
     if (!user) return next(createError.NotFound("User not found"));
 
-    //  cloudinary avatar upload
+    // cloudinary upload
     await uploadProfilePhoto(user, profilePhoto);
 
     res.json({
       message: "Profile photo uploaded successfully",
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const idFrontUpload = async (req, res, next) => {
+  try {
+    // client cloudinary upload response
+    const result = req.body;
+
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+    if (!user) return next(createError.NotFound("User not found"));
+
+    user.idFront = { ...result, date: Date.now() };
+    await user.save();
+
+    res.json({
+      message: "ID front uploaded successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const idBackUpload = async (req, res, next) => {
+  try {
+    // client cloudinary upload response
+    const result = req.body;
+
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+    if (!user) return next(createError.NotFound("User not found"));
+
+    user.idBack = { ...result, date: Date.now() };
+    await user.save();
+
+    res.json({
+      message: "ID back uploaded successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const documentSelfieUpload = async (req, res, next) => {
+  try {
+    // client cloudinary upload response
+    const result = req.body;
+
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+    if (!user) return next(createError.NotFound("User not found"));
+
+    user.documentSelfie = { ...result, date: Date.now() };
+    user.isDocumentVerified = true;
+    await user.save();
+
+    res.json({
+      message: "Document Selfie uploaded successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const documentUpload = async (req, res, next) => {
+  try {
+    // client cloudinary upload response
+    const result = req.body;
+
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+    if (!user) return next(createError.NotFound("User not found"));
+
+    // create new document
+    const documentName = user.requestedDocument || "Unnamed Document";
+    user.documents.unshift({ ...result, name: documentName });
+    user.isDocumentRequested = false;
+    user.requestedDocument = null;
+    user.requestedDocumentDescription = null;
+    await user.save();
+
+    const savedDocument = user.documents[0];
+
+    res.json(savedDocument);
   } catch (err) {
     next(err);
   }
@@ -324,4 +414,8 @@ module.exports = {
   profileRequestEmailVerification,
   profilePhotoReset,
   profilePhotoUpload,
+  idFrontUpload,
+  idBackUpload,
+  documentSelfieUpload,
+  documentUpload,
 };
