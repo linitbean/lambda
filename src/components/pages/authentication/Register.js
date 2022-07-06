@@ -1,5 +1,4 @@
 import React from "react";
-import storage from "local-storage-fallback";
 import { useHistory, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,11 +14,11 @@ import AuthLayout from "../../templates/Auth";
 
 import { registrationSchema } from "../../../validators/auth";
 
+import axiosInstance from "../../../utils/axios";
+
 const Register = () => {
   const history = useHistory();
   const { state } = useLocation();
-
-  const { mutate } = useProfile();
 
   const { register, handleSubmit, watch, errors, setError, formState } =
     useForm({
