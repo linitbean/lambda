@@ -41,7 +41,7 @@ const Register = () => {
       formData.referrer = state.referrer;
     }
     try {
-      const { data } = await axiosInstance.post("/auth/register", formData);
+      await axiosInstance.post("/auth/register", formData);
 
       history.push("/account/login");
     } catch (err) {
