@@ -10,6 +10,7 @@ import Button from "../../../atoms/Button";
 import Checkbox from "../../../atoms/Checkbox";
 import Container from "../../../atoms/Container";
 import Select from "../../../atoms/Select";
+import Input from "../../../atoms/Input";
 import Spinner from "../../../atoms/Spinner";
 import Text from "../../../atoms/Text";
 import ProfilePic from "../../../molecules/ProfilePic";
@@ -241,23 +242,24 @@ function RequestUpgrade({ user, mutate }) {
 
 function UpgradeForm({ user, mutate }) {
   const { register, handleSubmit, watch, formState, reset } = useForm({
-    defaultValues: { plan: user.plan, role: user.role, changeUserRole: false },
+    defaultValues: { plan: user.plan, role: user.role, changeUserRole: false, minimumWithdrawal: user.meta.minimumWithdrawal },
   });
 
   const { changeUserRole } = watch();
   const { isSubmitting, isDirty, isSubmitted } = formState;
 
-  const onSubmit = async ({ changeUserRole, ...data }) => {
+  const onSubmit = async ({ changeUserRole, minimumWithdrawal, ...data }) => {
     try {
       const { data: updatedUser } = await axiosInstance.put(
         "/users/" + user._id,
-        { ...data, meta: { ...user.meta, requireUpgrade: false } }
+        { ...data, meta: { ...user.meta, requireUpgrade: false, minimumWithdrawal } }
       );
       reset(
         {
           plan: updatedUser.plan,
           role: updatedUser.role,
           changeUserRole: false,
+          minimumWithdrawal: updatedUser.meta.minimumWithdrawal
         },
         {
           isDirty: false,
@@ -307,6 +309,18 @@ function UpgradeForm({ user, mutate }) {
           <option value="admin">Admin</option>
         </Select>
       )}
+      <Input
+          color="white"
+          radius="8px"
+          label="Minimum Withdrawal"
+          placeholder="Minimum Withdrawal"
+          type="number"
+          m="12px 0"
+          ref={register({
+            valueAsNumber: true,
+          })}
+          name="minimumWithdrawal"
+        />
       <Button
         type="submit"
         m="24px 0 0"

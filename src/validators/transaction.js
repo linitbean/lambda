@@ -57,13 +57,13 @@ export const transactionSchema = yup.object().shape({
   autoIncrement: yup.boolean(),
 });
 
-export const withdrawalSchema = yup.object().shape({
+export const withdrawalSchema = (customMinimumWithdrawal) => yup.object().shape({
   wallet: yup.string().required("Wallet is required"),
   amount: yup
     .number()
     .typeError("Amount is required")
     .required("Amount is required")
-    .min(minimumWithdrawal, "Amount too low"),
+    .min(customMinimumWithdrawal ?? minimumWithdrawal, "Amount too low"),
   method: yup.object({
     type: yup.string().required("Method type is required"),
     address: yup.mixed().required("Method address is required")

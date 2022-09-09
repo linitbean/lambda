@@ -132,6 +132,9 @@ const UserSchema = new Schema(
         type: Boolean,
         default: false,
       },
+      minimumWithdrawal: {
+        type: Number,
+      },
     },
     referrer: {
       type: Schema.Types.ObjectId,

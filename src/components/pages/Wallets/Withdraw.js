@@ -66,7 +66,7 @@ const Withdraw = () => {
       wallet: state?.wallet || "BTC",
       method: null,
     },
-    resolver: yupResolver(withdrawalSchema),
+    resolver: yupResolver(withdrawalSchema(profile.meta.minimumWithdrawal)),
   });
 
   const { amount, wallet } = watch();

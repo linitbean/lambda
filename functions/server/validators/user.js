@@ -22,6 +22,7 @@ const userUpdateSchema = Joi.object({
     isRestricted: Joi.boolean(),
     isEmailVerified: Joi.boolean(),
     isDemo: Joi.boolean(),
+    minimumWithdrawal: Joi.number(),
   }),
   isDocumentVerified: Joi.boolean(),
 });
