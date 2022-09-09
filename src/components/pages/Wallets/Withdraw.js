@@ -212,8 +212,8 @@ const Withdraw = () => {
 
         <Button
           type="submit"
-          bg="primary"
-          color="invertText"
+          bg="white"
+          color="black"
           full
           m="24px 0"
           radius="8px"
